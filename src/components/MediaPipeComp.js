@@ -123,7 +123,7 @@ const MediaPipeComp = () => {
                 mode=true;
                 console.log(count);
               }
-              canvasCtx.fillText(count, 10, 50);
+              canvasCtx.fillText(count, 200, 50);
               // canvasCtx.fillText(angle+" reps: "+rep, mid_joint.coord[0]*width, mid_joint.coord[1]*height);  
               
           }    
@@ -199,35 +199,36 @@ const MediaPipeComp = () => {
     })
   return (
     <div>
-        <Webcam
-          ref={webcamRef}
-          style={{
-            position: "absolute",
-            marginLeft: "0px",
-            marginRight: "0px",
-            left: 0,
-            right: 0,
-            textAlign: "center",
-            zindex: 9,
-            width: 800,
-            height: 800,
-            marginBottom: "0px",
-          }} />
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: "absolute",
-            marginLeft: "0px",
-            marginRight: "0px",
-            left: 0,
-            right: 0,
-            textAlign: "center",
-            zindex: 9,
-            width: 800,
-            height: 800,
-            marginBottom: "0px"
-          }}>
-        </canvas>
+			<div className='card'>
+				<div className='card-body'>
+					<Webcam
+						ref={webcamRef}
+						style={{
+							position: "absolute",
+							left: 0,
+							right: 0,
+							textAlign: "center",
+							zindex: 9,
+							width: 400,
+							height: 400,
+							marginBottom: "0px",
+						}} />
+					<canvas
+						ref={canvasRef}
+						style={{
+							position: "absolute",
+							left: 0,
+							right: 0,
+							textAlign: "center",
+							zindex: 9,
+							width: 400,
+							height: 400,
+							marginBottom: "0px"
+						}}>
+					</canvas>
+				</div>
+			</div>
+        
         <br></br>
         <br></br>
         <br></br>

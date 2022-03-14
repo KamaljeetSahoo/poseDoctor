@@ -3,16 +3,17 @@ import './App.scss'
 import Squats from "./components/Squats";
 import Home from "./components/Home";
 import HandExtension from "./components/HandExtension";
-import Navbar from "./components/UI_Components/Navbar";
+import NavbarComp from "./components/UI_Components/Navbar";
+import MediaPipeComp from "./components/MediaPipeComp";
 
 function App() {
   return (
       <Router>
         <div className="app">
-          <Navbar/>
+          <NavbarComp/>
           <div>
             <Routes>
-              <Route exact path='/' element={<Home/>}/>
+              <Route exact path='/' element={<MediaPipeComp/>}/>
               <Route exact path='/squats' element={<Squats/>}/>
               <Route exact path='/handExtension' element={<HandExtension/>}/>
             </Routes>
