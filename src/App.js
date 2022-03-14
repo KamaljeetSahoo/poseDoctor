@@ -3,23 +3,22 @@ import './App.scss'
 import Squats from "./components/Squats";
 import Home from "./components/Home";
 import HandExtension from "./components/HandExtension";
-import AppLayout from "./layouts/AppLayout";
-import Sidebar from "./components/sidebar/Sidebar";
+import Navbar from "./components/UI_Components/Navbar";
 
 function App() {
   return (
-    <div className="App">
       <Router>
-        <Sidebar/>
-        <div>
-          <Routes path='/' element={<AppLayout/>}>
-            <Route index element={<Home/>}/>
-            <Route exact path='/squats' element={<Squats/>}/>
-            <Route exact path='/handExtension' element={<HandExtension/>}/>
-          </Routes>
+        <div className="app">
+          <Navbar/>
+          <div>
+            <Routes>
+              <Route exact path='/' element={<Home/>}/>
+              <Route exact path='/squats' element={<Squats/>}/>
+              <Route exact path='/handExtension' element={<HandExtension/>}/>
+            </Routes>
+          </div>
         </div>
       </Router>
-    </div>
   );
 }
 
