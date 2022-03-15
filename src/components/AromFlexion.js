@@ -1,17 +1,24 @@
-import React, { useRef, useEffect, useState } from "react";
-import { Col, Row } from "reactstrap";
-import { joints } from "./Joints";
-import { Pose, POSE_CONNECTIONS } from "@mediapipe/pose";
-import * as cam from "@mediapipe/camera_utils";
-import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
-import * as ReactBootStrap from "react-bootstrap";
-import CanvasWebCam from "./UI_Components/CanvasWebCam";
+import React, { useRef, useEffect, useState } from "react"
+import { Button, Col, Modal, Row } from 'react-bootstrap'
+
+import { joints } from "./Joints"
+import { Pose, POSE_CONNECTIONS } from "@mediapipe/pose"
+import * as cam from "@mediapipe/camera_utils"
+import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils"
+import * as ReactBootStrap from "react-bootstrap"
+import CanvasWebCam from "./UI_Components/CanvasWebCam"
 import { calculateAngles } from './utils'
+import squatImg from './images/arom_flex.gif'
 
 //back_stretch
 const AromFlexion = () => {
   const webcamRef = useRef(0);
   const canvasRef = useRef(0);
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   const [vis, setVis] = useState([]);
   var count = 0;
   var mode = null;
@@ -156,11 +163,26 @@ const AromFlexion = () => {
       camera.start();
     }
   }, []);
+  const ModalComp = () => {
+		return (
+			<Modal show={show} onHide={handleClose}>
+				<Modal.Body>
+					<div>
+						<img className='img-fluid' src={squatImg} alt='squat'/>
+					</div>
+				</Modal.Body>
+			</Modal>
+		)
+	}
   return (
     <div>
       <Row>
         <Col md={6}>
           <div className="align-items-center justify-content-center">
+          <Button variant="primary" onClick={handleShow}>
+										Show Example
+									</Button>
+									<ModalComp/>
             <CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
           </div>
         </Col>

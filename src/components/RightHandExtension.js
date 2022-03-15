@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Pose, POSE_CONNECTIONS } from "@mediapipe/pose";
+import { Button, Col, Modal, Row } from 'react-bootstrap'
 import * as cam from "@mediapipe/camera_utils";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import Webcam from "react-webcam";
 import { Doughnut } from "react-chartjs-2";
 import { joints } from "./Joints";
 import CanvasWebCam from "./UI_Components/CanvasWebCam";
+import squatImg from './images/squats.gif'
+
 
 var count = 0;
 var mode = null;
@@ -13,6 +16,10 @@ var adhere = 10;
 var camera = null;
 var message = "start excercise";
 const RightHandExtension = () => {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   const data = {
     labels: ["Adherence", "rem"],
     datasets: [
@@ -265,7 +272,17 @@ const RightHandExtension = () => {
   if (timer == "00:00:00") {
     console.log(count);
   }
-
+  const ModalComp = () => {
+		return (
+			<Modal show={show} onHide={handleClose}>
+				<Modal.Body>
+					<div>
+						<img className='img-fluid' src={squatImg} alt='squat'/>
+					</div>
+				</Modal.Body>
+			</Modal>
+		)
+	}
   return (
     <div>
       <div className="mt-5">
@@ -276,6 +293,7 @@ const RightHandExtension = () => {
               <button className="btn btn-success" onClick={onClickReset}>
                 Reset
               </button>
+              
             </div>
             <div class="text-danger font-weight-bold display-6"><p>{message}</p></div>
           </div>
@@ -285,7 +303,13 @@ const RightHandExtension = () => {
             </div>
           </div>
         </div>
-          <CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef}/>
+        <div className='align-items-center justify-content-center'>
+									<Button variant="primary" onClick={handleShow}>
+										Show Example
+									</Button>
+									<ModalComp/>
+									<CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
+                </div>
       </div>
 
       <br></br>
