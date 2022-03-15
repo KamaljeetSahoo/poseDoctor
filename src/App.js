@@ -7,6 +7,8 @@ import NavbarComp from "./components/UI_Components/Navbar";
 import MediaPipeComp from "./components/MediaPipeComp";
 import RightHandExtension from './components/RightHandExtension';
 import Lunges from './components/Lunges';
+import AromFlexion from './components/AromFlexion';
+import AromLateralFlexion from './components/AromLateralFlexion';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
               <Route exact path='/demo' element={<MediaPipeComp/>}/>
               <Route exact path='/rightHandExtension' element={<RightHandExtension/>}/>
               <Route exact path='/lunges' element={<Lunges/>}/>
+              <Route exact path='/arom_flexion' element={<AromFlexion/>}/>
+              <Route exact path='/arom_lateral_flexion' element={<AromLateralFlexion/>}/>
             </Routes>
           </div>
         </div>
