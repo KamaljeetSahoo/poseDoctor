@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { Pose, POSE_CONNECTIONS } from '@mediapipe/pose'
 import * as cam from '@mediapipe/camera_utils'
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
@@ -123,6 +123,8 @@ const MediaPipeComp = () => {
   return (
     <div>
 			<CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef}/>
+      <div style={{marginTop: 400}}>
+      </div>
     </div>
   )
 }

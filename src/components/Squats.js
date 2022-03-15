@@ -1,16 +1,23 @@
-import React, {useRef,useEffect} from 'react'
-import { Col, Row } from 'reactstrap'
+import React, {useRef,useEffect, useState} from 'react'
+import { Button, Col, Modal, Row } from 'react-bootstrap'
 import { joints } from './Joints'
 import { Pose, POSE_CONNECTIONS } from '@mediapipe/pose'
 import * as cam from '@mediapipe/camera_utils'
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
 import CanvasWebCam from './UI_Components/CanvasWebCam'
 import { calculateAngles } from './utils'
+import squatImg from './images/squats.gif'
 
 //right_squat
 const Squats = () => {
 	const webcamRef = useRef(0)
 	const canvasRef = useRef(0)
+
+	const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
   
 	var count = 0;
 	var mode = null;
@@ -121,18 +128,34 @@ const Squats = () => {
 		camera.start()
 	  }
 	})
+	console.log(show)
+	const ModalComp = () => {
+		return (
+			<Modal show={show} onHide={handleClose}>
+				<Modal.Body>
+					<div>
+						<img className='img-fluid' src={squatImg} alt='squat'/>
+					</div>
+				</Modal.Body>
+			</Modal>
+		)
+	}
   return (
     <div>
         <Row>
             <Col md={6}>
                 <div className='align-items-center justify-content-center'>
+									<Button variant="primary" onClick={handleShow}>
+										Show Example
+									</Button>
+									<ModalComp/>
 									<CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
                 </div>
             </Col>
-            <Col md={6} style={{position:'relative'}}>Hello</Col>
+            <Col md={6} style={{position:'relative'}}></Col>
         </Row>
-				<Row>
-					Hello
+				<Row style={{marginTop:400}}>
+					
 				</Row>
     </div>
   )
