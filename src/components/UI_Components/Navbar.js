@@ -43,6 +43,28 @@ const NavbarComp = () => {
 														Lunges
 												</NavLink>
 											</DropdownItem>
+											<DropdownItem>
+												<NavLink href='/shoulderExtension'>
+														Shoulder Extension
+												</NavLink>
+											</DropdownItem>
+										</DropdownMenu>
+									</UncontrolledDropdown>
+									<UncontrolledDropdown nav inNavbar>
+										<DropdownToggle nav caret>
+											AROM
+										</DropdownToggle>
+										<DropdownMenu right>
+											<DropdownItem>
+												<NavLink href='/arom_flexion'>
+														AROM Flexion
+												</NavLink>
+											</DropdownItem>
+											<DropdownItem>
+												<NavLink href='/arom_lateral_flexion'>
+														AROM Lateral Flexion
+												</NavLink>
+											</DropdownItem>
 										</DropdownMenu>
 									</UncontrolledDropdown>
 							</Nav>

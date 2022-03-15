@@ -77,20 +77,20 @@ const AromFlexion = () => {
     } else console.log("no detections");
 
     const vis_array = [];
-
-    for (const j in joints) {
+    var joint_names = {"right_shoulder":0, "right_knee":0, "right_hip":0, "left_shoulder":0, "left_knee":0, "left_hip":0}
+    for (const j in joint_names) {
       let d = {};
       d["name"] = j;
       if (results.poseLandmarks)
+      {
         d["visibility"] = results.poseLandmarks[joints[j]].visibility;
+      }
       else d["visibilty"] = 0;
       if (d["visibility"] > 0.5) d["color"] = "green";
       else d["color"] = "red";
       vis_array.push(d);
     }
-
     setVis(vis_array);
-
   }
 
   function onResults(results) {
