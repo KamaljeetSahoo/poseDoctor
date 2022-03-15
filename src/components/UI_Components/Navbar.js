@@ -1,5 +1,5 @@
 import React, {useState} from 'react'
-import { Collapse, Container, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
+import { Collapse, Container, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, UncontrolledDropdown, DropdownToggle, DropdownItem, DropdownMenu } from 'reactstrap';
 
 const NavbarComp = () => {
 	const [collapsed, setCollapsed] = useState(true)
@@ -18,15 +18,23 @@ const NavbarComp = () => {
 								<NavItem>
 									<NavLink href="/squats/">Components</NavLink>
 								</NavItem>
-								<NavItem>
-									<NavLink href="/armextension/">Components</NavLink>
-								</NavItem>
-								<NavItem>
-									<NavLink href="/components/">Components</NavLink>
-								</NavItem>
-								<NavItem>
-									<NavLink href="https://github.com/reactstrap/reactstrap">GitHub</NavLink>
-								</NavItem>
+									<UncontrolledDropdown nav inNavbar>
+										<DropdownToggle nav caret>
+											Exercises
+										</DropdownToggle>
+										<DropdownMenu right>
+											<DropdownItem>
+												<NavLink href='/squats'>
+													Squats
+												</NavLink>
+											</DropdownItem>
+											<DropdownItem>
+												<NavLink href='/handExtension'>
+														Hand Extension
+													</NavLink>
+											</DropdownItem>
+										</DropdownMenu>
+									</UncontrolledDropdown>
 							</Nav>
 						</Collapse>
 					</Container>
