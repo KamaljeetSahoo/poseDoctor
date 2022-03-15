@@ -1,4 +1,4 @@
-import React, {useRef} from 'react'
+import React, {useRef, useEffect} from 'react'
 import { Col, Row } from 'reactstrap'
 import Webcam from 'react-webcam'
 import { joints } from './Joints'
