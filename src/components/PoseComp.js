@@ -1,8 +1,8 @@
 import React, {useEffect, useRef} from 'react'
-import { Pose, POSE_CONNECTIONS, LandmarkGrid, PoseConfig } from '@mediapipe/pose'
+import { Pose, POSE_CONNECTIONS } from '@mediapipe/pose'
 import * as cam from '@mediapipe/camera_utils'
 import { drawConnectors, drawLandmarks} from '@mediapipe/drawing_utils'
-import Webcam from 'react-webcam'
+import CanvasWebCam from './UI_Components/CanvasWebCam'
 
 const PoseComp = () => {
     const webcamRef = useRef(0)
@@ -67,35 +67,7 @@ const PoseComp = () => {
     })
     return (
       <div className="App">
-        <Webcam
-          ref={webcamRef}
-          style={{
-            position: "absolute",
-            marginLeft: "0px",
-            marginRight: "0px",
-            left: 0,
-            right: 0,
-            textAlign: "center",
-            zindex: 9,
-            width: 400,
-            height: 400,
-            marginBottom: "0px",
-          }} />
-        <canvas
-          ref={canvasRef}
-          style={{
-            position: "absolute",
-            marginLeft: "0px",
-            marginRight: "0px",
-            left: 0,
-            right: 0,
-            textAlign: "center",
-            zindex: 9,
-            width: 400,
-            height: 400,
-            marginBottom: "0px"
-          }}>
-        </canvas>
+        <CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
       </div>
     );
 }

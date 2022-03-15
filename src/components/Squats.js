@@ -1,10 +1,11 @@
 import React, {useRef,useEffect} from 'react'
 import { Col, Row } from 'reactstrap'
-import Webcam from 'react-webcam'
 import { joints } from './Joints'
-import { Pose, POSE_CONNECTIONS, LandmarkGrid, PoseConfig } from '@mediapipe/pose'
+import { Pose, POSE_CONNECTIONS } from '@mediapipe/pose'
 import * as cam from '@mediapipe/camera_utils'
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
+import CanvasWebCam from './UI_Components/CanvasWebCam'
+import { calculateAngles } from './utils'
 
 //right_squat
 const Squats = () => {
@@ -16,15 +17,6 @@ const Squats = () => {
   
 	var camera = null
   
-	function calculateAngles(a, b, c) {
-  
-	  var radians = Math.atan2(c[1] - b[1], c[0] - b[0]) - Math.atan2(a[1] - b[1], a[0] - b[0]);
-	  var angle = Math.abs(radians * 180.0 / Math.PI);
-  
-	  if (angle > 180.0)
-		angle = 360 - angle;
-	  return angle;
-	}
   
   
 	function poseEstimation(results) {
@@ -134,31 +126,7 @@ const Squats = () => {
         <Row>
             <Col md={6}>
                 <div className='align-items-center justify-content-center'>
-									<Webcam
-									ref={webcamRef}
-									style={{
-											position: "absolute",
-											marginLeft: "0px",
-											marginRight: "0px",
-											textAlign: "center",
-											zindex: 9,
-											width: "400",
-											height: 'auto',
-											marginBottom: "0px",
-									}} />
-									<canvas
-									ref={canvasRef}
-									style={{
-											position: "absolute",
-											marginLeft: "0px",
-											marginRight: "0px",
-											textAlign: "center",
-											zindex: 9,
-											width: "400",
-											height: 'auto',
-											marginBottom: "0px"
-									}}>
-									</canvas>
+									<CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
                 </div>
             </Col>
             <Col md={6} style={{position:'relative'}}>Hello</Col>
