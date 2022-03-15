@@ -1,21 +1,20 @@
-import React, {useRef,useEffect,useState} from 'react'
+import React, {useRef,useEffect} from 'react'
 import { Col, Row } from 'reactstrap'
 import Webcam from 'react-webcam'
 import { joints } from './Joints'
 import { Pose, POSE_CONNECTIONS, LandmarkGrid, PoseConfig } from '@mediapipe/pose'
 import * as cam from '@mediapipe/camera_utils'
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
-import * as ReactBootStrap from "react-bootstrap";
-//back_stretch
-const AromFlexion = () => {
+
+//shoulder_exercise
+const ShoulderExtension = () => {
 	const webcamRef = useRef(0)
 	const canvasRef = useRef(0)
-    const [vis,setVis] = useState([]);
+  
 	var count = 0;
 	var mode = null;
   
-    var camera = null
-    
+	var camera = null
   
 	function calculateAngles(a, b, c) {
   
@@ -23,7 +22,8 @@ const AromFlexion = () => {
 	  var angle = Math.abs(radians * 180.0 / Math.PI);
   
 	  if (angle > 180.0)
-		angle = 360 - angle;
+        angle = 360 - angle;
+        
 	  return angle;
 	}
   
@@ -35,7 +35,7 @@ const AromFlexion = () => {
   
 	  var width = canvasElement.width;
 	  var height = canvasElement.height;
-        
+  
 	  if (results.poseLandmarks) {
   
 		var first_joint = {
@@ -43,22 +43,21 @@ const AromFlexion = () => {
 		  coord: [results.poseLandmarks[joints.right_shoulder].x, results.poseLandmarks[joints.right_shoulder].y]
 		};
 		var mid_joint = {
-		  name: "right_hip",
-		  coord: [results.poseLandmarks[joints.right_hip].x, results.poseLandmarks[joints.right_hip].y]
+		  name: "right_elbow",
+		  coord: [results.poseLandmarks[joints.right_elbow].x, results.poseLandmarks[joints.right_elbow].y]
 		};
 		var end_joint = {
-		  name: "right_knee",
-		  coord: [results.poseLandmarks[joints.right_knee].x, results.poseLandmarks[joints.right_knee].y]
+		  name: "right_wrist",
+		  coord: [results.poseLandmarks[joints.right_wrist].x, results.poseLandmarks[joints.right_wrist].y]
 		};
   
 		var angle = calculateAngles(first_joint.coord, mid_joint.coord, end_joint.coord);
   
-        angle=180-angle;
 		canvasCtx.fillText(angle, mid_joint.coord[0] * width, mid_joint.coord[1] * height);
   
   
-		var high = 150;
-		var low = 90;
+		var high = 145;
+		var low = 100;
   
 		if (angle > high) {
 		  mode = false;
@@ -68,32 +67,13 @@ const AromFlexion = () => {
 		  mode = true;
 		  console.log(count);
 		}
-		canvasCtx.fillText(angle, 200, 50);
+		canvasCtx.fillText(count, 200, 50);
   
 	  }
 	  else
 		console.log("no detections");
-      
-        const vis_array= [];
-
-        for(const j in joints){
-
-            let d={};
-            d["name"]=j;
-            if(results.poseLandmarks)
-                d["visibility"]=results.poseLandmarks[joints[j]].visibility;
-            else
-                d["visibilty"]=0;
-            if(d["visibility"]>0.5)
-                d["color"]="green";
-            else
-                d["color"]="red";
-            vis_array.push(d);   
-        }
-        
-        setVis(vis_array);
-     
-        // console.log(vis);
+  
+  
 	}
   
 	function onResults(results) {
@@ -148,9 +128,8 @@ const AromFlexion = () => {
 		  height: 800
 		});
 		camera.start()
-      }
-      console.log(vis);
-	},[setVis])
+	  }
+	})
   return (
     <div>
         <Row>
@@ -183,39 +162,7 @@ const AromFlexion = () => {
 									</canvas>
                 </div>
             </Col>
-            <Col md={6} style={{position:'float'}}>
-            <div>
-                                    <ReactBootStrap.Table striped bordered hover>
-                                        <thead>
-                                            <tr>
-                                            <th>#</th>
-                                            <th>First Name</th>
-                                            <th>Last Name</th>
-                                            <th>Username</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                            <td>1</td>
-                                            <td>Mark</td>
-                                            <td>Otto</td>
-                                            <td>@mdo</td>
-                                            </tr>
-                                            <tr>
-                                            <td>2</td>
-                                            <td>Jacob</td>
-                                            <td>Thornton</td>
-                                            <td>@fat</td>
-                                            </tr>
-                                            <tr>
-                                            <td>3</td>
-                                            <td colSpan={2}>Larry the Bird</td>
-                                            <td>@twitter</td>
-                                            </tr>
-                                        </tbody>
-                                        </ReactBootStrap.Table>                                        
-            </div>
-            </Col>
+            <Col md={6} style={{position:'relative'}}>Hello</Col>
         </Row>
 				<Row>
 					Hello
@@ -224,4 +171,4 @@ const AromFlexion = () => {
   )
 }
 
-export default AromFlexion 
+export default ShoulderExtension

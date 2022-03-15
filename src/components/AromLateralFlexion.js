@@ -24,7 +24,17 @@ const AromLateralFlexion = () => {
 	  if (angle > 180.0)
 		angle = 360 - angle;
 	  return angle;
-	}
+    }
+    
+	function calculateAngle(b, c) {
+  
+        var radians = Math.atan2(c[1] - b[1], c[0] - b[0]);
+        var angle = Math.abs(radians * 180.0 / Math.PI);
+    
+        if (angle > 180.0)
+          angle = 360 - angle;
+        return angle;
+      }    
   
   
 	function poseEstimation(results) {
@@ -52,10 +62,11 @@ const AromLateralFlexion = () => {
                   (results.poseLandmarks[joints.left_shoulder].y + results.poseLandmarks[joints.right_shoulder].y)/2 ]
 		};
   
-		var angle = calculateAngles(first_joint.coord, mid_joint.coord, end_joint.coord);
+		// var angle = calculateAngles(first_joint.coord, mid_joint.coord, end_joint.coord);
         
+        var angle = calculateAngle(mid_joint.coord, end_joint.coord);
         angle=90-angle;
-        
+
 		canvasCtx.fillText(angle, mid_joint.coord[0] * width, mid_joint.coord[1] * height);
   
   
