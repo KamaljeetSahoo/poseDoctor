@@ -2,6 +2,9 @@ import React, {useRef} from 'react'
 import { Col, Row } from 'reactstrap'
 import Webcam from 'react-webcam'
 import { joints } from './Joints'
+import { Pose, POSE_CONNECTIONS, LandmarkGrid, PoseConfig } from '@mediapipe/pose'
+import * as cam from '@mediapipe/camera_utils'
+import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
 
 //right_squat
 const Squats = () => {
