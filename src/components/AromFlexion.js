@@ -91,7 +91,6 @@ const AromFlexion = () => {
 
     setVis(vis_array);
 
-    // console.log(vis);
   }
 
   function onResults(results) {
@@ -156,8 +155,7 @@ const AromFlexion = () => {
       });
       camera.start();
     }
-    console.log(vis);
-  }, [setVis]);
+  }, []);
   return (
     <div>
       <Row>
@@ -166,41 +164,32 @@ const AromFlexion = () => {
             <CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
           </div>
         </Col>
-        <Col md={6} style={{ position: "float" }}>
-          <div>
-            <ReactBootStrap.Table striped bordered hover>
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Username</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>1</td>
-                  <td>Mark</td>
-                  <td>Otto</td>
-                  <td>@mdo</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>Jacob</td>
-                  <td>Thornton</td>
-                  <td>@fat</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td colSpan={2}>Larry the Bird</td>
-                  <td>@twitter</td>
-                </tr>
-              </tbody>
-            </ReactBootStrap.Table>
-          </div>
-        </Col>
       </Row>
       <Row>Hello</Row>
+      <Row>
+        <Col md={6} style={{ marginTop:400 }}>
+            <div>
+              <ReactBootStrap.Table bordered className="text-white">
+                <thead className="text-dark">
+                  <tr>
+                    <th>Body Part</th>
+                    <th>Visibilty</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {vis.map((vi, i) => {
+                    return (
+                      <tr key={i} style={{backgroundColor: `${vi.color}`}}>
+                        <td>{vi.name}</td>
+                        <td>{vi.visibility}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </ReactBootStrap.Table>
+            </div>
+          </Col>
+      </Row>
     </div>
   );
 };
