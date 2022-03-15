@@ -6,8 +6,8 @@ import { Pose, POSE_CONNECTIONS, LandmarkGrid, PoseConfig } from '@mediapipe/pos
 import * as cam from '@mediapipe/camera_utils'
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
 
-//right_squat
-const Squats = () => {
+//right_lunges
+const Lunges = () => {
 	const webcamRef = useRef(0)
 	const canvasRef = useRef(0)
   
@@ -170,4 +170,4 @@ const Squats = () => {
   )
 }
 
-export default Squats
+export default Lunges

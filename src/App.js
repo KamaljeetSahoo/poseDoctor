@@ -5,7 +5,8 @@ import Home from "./components/Home";
 import HandExtension from "./components/HandExtension";
 import NavbarComp from "./components/UI_Components/Navbar";
 import MediaPipeComp from "./components/MediaPipeComp";
-import RightHandExtension from './components/RightHandExtension'
+import RightHandExtension from './components/RightHandExtension';
+import Lunges from './components/Lunges';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <Route exact path='/handExtension' element={<HandExtension/>}/>
               <Route exact path='/demo' element={<MediaPipeComp/>}/>
               <Route exact path='/rightHandExtension' element={<RightHandExtension/>}/>
+              <Route exact path='/lunges' element={<Lunges/>}/>
             </Routes>
           </div>
         </div>
