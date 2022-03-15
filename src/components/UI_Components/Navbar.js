@@ -16,7 +16,7 @@ const NavbarComp = () => {
 						<Collapse isOpen={!collapsed} navbar>
 							<Nav navbar>
 								<NavItem>
-									<NavLink href="/squats/">Components</NavLink>
+									<NavLink href="/demo">Demo</NavLink>
 								</NavItem>
 									<UncontrolledDropdown nav inNavbar>
 										<DropdownToggle nav caret>
@@ -31,6 +31,11 @@ const NavbarComp = () => {
 											<DropdownItem>
 												<NavLink href='/handExtension'>
 														Hand Extension
+													</NavLink>
+											</DropdownItem>
+											<DropdownItem>
+												<NavLink href='/rightHandExtension'>
+														Right Hand Extension
 													</NavLink>
 											</DropdownItem>
 										</DropdownMenu>
