@@ -31,12 +31,17 @@ const NavbarComp = () => {
 											<DropdownItem>
 												<NavLink href='/handExtension'>
 														Hand Extension
-													</NavLink>
+												</NavLink>
 											</DropdownItem>
 											<DropdownItem>
 												<NavLink href='/rightHandExtension'>
 														Right Hand Extension
-													</NavLink>
+												</NavLink>
+											</DropdownItem>
+											<DropdownItem>
+												<NavLink href='/lunges'>
+														Lunges
+												</NavLink>
 											</DropdownItem>
 										</DropdownMenu>
 									</UncontrolledDropdown>
