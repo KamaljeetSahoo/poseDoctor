@@ -1,34 +1,17 @@
-import React, { useEffect, useRef, useState, useCallback } from 'react'
-import { Pose, POSE_CONNECTIONS, LandmarkGrid, PoseConfig } from '@mediapipe/pose'
+import React, { useEffect, useRef } from 'react'
+import { Pose, POSE_CONNECTIONS } from '@mediapipe/pose'
 import * as cam from '@mediapipe/camera_utils'
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
-import Webcam from 'react-webcam'
-import { expectPromiseToFail } from '@tensorflow/tfjs-core/dist/test_util'
 import { joints } from './Joints'
+import CanvasWebCam from './UI_Components/CanvasWebCam'
 
 
 // lumbar spine(going down half),lateral flexion(back side ways),extension(top to bottom)
-const FACING_MODE_USER = "user";
-const FACING_MODE_ENVIRONMENT = "environment";
 
-const videoConstraints = {
-  facingMode: FACING_MODE_USER
-};
 
 const MediaPipeComp = () => {
   const webcamRef = useRef(0)
   const canvasRef = useRef(0)
-
-	const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
-
-	const handleClick = useCallback(() => {
-    setFacingMode(
-      prevState =>
-        prevState === FACING_MODE_USER
-          ? FACING_MODE_ENVIRONMENT
-          : FACING_MODE_USER
-    );
-  }, []);
 
   var count = 0;
   var mode = null;
@@ -148,43 +131,7 @@ const MediaPipeComp = () => {
   })
   return (
     <div>
-			<button className='btn btn-primary mb-3' onClick={handleClick}>Switch camera</button>
-      <div className='card'>
-          <Webcam
-            ref={webcamRef}
-						videoConstraints={{
-							...videoConstraints,
-							facingMode
-						}}
-            style={{
-              position: "absolute",
-              left: 0,
-              right: 0,
-              textAlign: "center",
-              zindex: 9,
-              width: 400,
-              height: 400,
-              marginBottom: "0px",
-            }} />
-          <canvas
-            ref={canvasRef}
-            style={{
-              position: "absolute",
-              left: 0,
-              right: 0,
-              textAlign: "center",
-              zindex: 9,
-              width: 400,
-              height: 400,
-              marginBottom: "0px"
-            }}>
-          </canvas>
-      </div>
-
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>{count}</p>
+			<CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef}/>
     </div>
   )
 }
