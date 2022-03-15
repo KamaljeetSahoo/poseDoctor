@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { Pose, POSE_CONNECTIONS, LandmarkGrid, PoseConfig } from '@mediapipe/pose'
 import * as cam from '@mediapipe/camera_utils'
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
@@ -8,11 +8,27 @@ import { joints } from './Joints'
 
 
 // lumbar spine(going down half),lateral flexion(back side ways),extension(top to bottom)
+const FACING_MODE_USER = "user";
+const FACING_MODE_ENVIRONMENT = "environment";
 
+const videoConstraints = {
+  facingMode: FACING_MODE_USER
+};
 
 const MediaPipeComp = () => {
   const webcamRef = useRef(0)
   const canvasRef = useRef(0)
+
+	const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
+
+	const handleClick = useCallback(() => {
+    setFacingMode(
+      prevState =>
+        prevState === FACING_MODE_USER
+          ? FACING_MODE_ENVIRONMENT
+          : FACING_MODE_USER
+    );
+  }, []);
 
   var count = 0;
   var mode = null;
@@ -74,8 +90,6 @@ const MediaPipeComp = () => {
     }
     else
       console.log("no detections");
-
-
   }
 
   function onResults(results) {
@@ -134,10 +148,14 @@ const MediaPipeComp = () => {
   })
   return (
     <div>
+			<button className='btn btn-primary mb-3' onClick={handleClick}>Switch camera</button>
       <div className='card'>
-        <div className='card-body'>
           <Webcam
             ref={webcamRef}
+						videoConstraints={{
+							...videoConstraints,
+							facingMode
+						}}
             style={{
               position: "absolute",
               left: 0,
@@ -161,7 +179,6 @@ const MediaPipeComp = () => {
               marginBottom: "0px"
             }}>
           </canvas>
-        </div>
       </div>
 
       <br></br>
