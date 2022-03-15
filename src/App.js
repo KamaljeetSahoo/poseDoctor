@@ -6,6 +6,7 @@ import HandExtension from "./components/HandExtension";
 import NavbarComp from "./components/UI_Components/Navbar";
 import MediaPipeComp from "./components/MediaPipeComp";
 import RightHandExtension from './components/RightHandExtension'
+import Timer from './components/timer'
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
               <Route exact path='/handExtension' element={<HandExtension/>}/>
               <Route exact path='/demo' element={<MediaPipeComp/>}/>
               <Route exact path='/rightHandExtension' element={<RightHandExtension/>}/>
+              <Route exact path='/timer' element={<Timer/>}/>
             </Routes>
           </div>
         </div>
