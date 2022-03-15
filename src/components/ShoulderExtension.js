@@ -1,14 +1,13 @@
 import React, {useRef,useEffect} from 'react'
 import { Col, Row } from 'reactstrap'
+import Webcam from 'react-webcam'
 import { joints } from './Joints'
-import { Pose, POSE_CONNECTIONS } from '@mediapipe/pose'
+import { Pose, POSE_CONNECTIONS, LandmarkGrid, PoseConfig } from '@mediapipe/pose'
 import * as cam from '@mediapipe/camera_utils'
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
-import CanvasWebCam from './UI_Components/CanvasWebCam'
-import { calculateAngles } from './utils'
 
-//right_squat
-const Squats = () => {
+//shoulder_exercise
+const ShoulderExtension = () => {
 	const webcamRef = useRef(0)
 	const canvasRef = useRef(0)
   
@@ -17,6 +16,16 @@ const Squats = () => {
   
 	var camera = null
   
+	function calculateAngles(a, b, c) {
+  
+	  var radians = Math.atan2(c[1] - b[1], c[0] - b[0]) - Math.atan2(a[1] - b[1], a[0] - b[0]);
+	  var angle = Math.abs(radians * 180.0 / Math.PI);
+  
+	  if (angle > 180.0)
+        angle = 360 - angle;
+        
+	  return angle;
+	}
   
   
 	function poseEstimation(results) {
@@ -30,16 +39,16 @@ const Squats = () => {
 	  if (results.poseLandmarks) {
   
 		var first_joint = {
-		  name: "right_hip",
-		  coord: [results.poseLandmarks[joints.right_hip].x, results.poseLandmarks[joints.right_hip].y]
+		  name: "right_shoulder",
+		  coord: [results.poseLandmarks[joints.right_shoulder].x, results.poseLandmarks[joints.right_shoulder].y]
 		};
 		var mid_joint = {
-		  name: "right_knee",
-		  coord: [results.poseLandmarks[joints.right_knee].x, results.poseLandmarks[joints.right_knee].y]
+		  name: "right_elbow",
+		  coord: [results.poseLandmarks[joints.right_elbow].x, results.poseLandmarks[joints.right_elbow].y]
 		};
 		var end_joint = {
-		  name: "right_ankle",
-		  coord: [results.poseLandmarks[joints.right_ankle].x, results.poseLandmarks[joints.right_ankle].y]
+		  name: "right_wrist",
+		  coord: [results.poseLandmarks[joints.right_wrist].x, results.poseLandmarks[joints.right_wrist].y]
 		};
   
 		var angle = calculateAngles(first_joint.coord, mid_joint.coord, end_joint.coord);
@@ -47,8 +56,8 @@ const Squats = () => {
 		canvasCtx.fillText(angle, mid_joint.coord[0] * width, mid_joint.coord[1] * height);
   
   
-		var high = 150;
-		var low = 90;
+		var high = 145;
+		var low = 100;
   
 		if (angle > high) {
 		  mode = false;
@@ -126,7 +135,31 @@ const Squats = () => {
         <Row>
             <Col md={6}>
                 <div className='align-items-center justify-content-center'>
-									<CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
+									<Webcam
+									ref={webcamRef}
+									style={{
+											position: "absolute",
+											marginLeft: "0px",
+											marginRight: "0px",
+											textAlign: "center",
+											zindex: 9,
+											width: "400",
+											height: 'auto',
+											marginBottom: "0px",
+									}} />
+									<canvas
+									ref={canvasRef}
+									style={{
+											position: "absolute",
+											marginLeft: "0px",
+											marginRight: "0px",
+											textAlign: "center",
+											zindex: 9,
+											width: "400",
+											height: 'auto',
+											marginBottom: "0px"
+									}}>
+									</canvas>
                 </div>
             </Col>
             <Col md={6} style={{position:'relative'}}>Hello</Col>
@@ -138,4 +171,4 @@ const Squats = () => {
   )
 }
 
-export default Squats
+export default ShoulderExtension

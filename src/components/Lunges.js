@@ -7,8 +7,8 @@ import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
 import CanvasWebCam from './UI_Components/CanvasWebCam'
 import { calculateAngles } from './utils'
 
-//right_squat
-const Squats = () => {
+//right_lunges
+const Lunges = () => {
 	const webcamRef = useRef(0)
 	const canvasRef = useRef(0)
   
@@ -16,7 +16,6 @@ const Squats = () => {
 	var mode = null;
   
 	var camera = null
-  
   
   
 	function poseEstimation(results) {
@@ -138,4 +137,4 @@ const Squats = () => {
   )
 }
 
-export default Squats
+export default Lunges
