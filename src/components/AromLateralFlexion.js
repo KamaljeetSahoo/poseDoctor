@@ -30,7 +30,7 @@ const AromLateralFlexion = () => {
     var angle = Math.abs((radians * 180.0) / Math.PI);
 
     if (angle > 180.0) angle = 360 - angle;
-    return angle;
+    return Math.round(angle);
   }
 
   function poseEstimation(results) {
@@ -38,6 +38,12 @@ const AromLateralFlexion = () => {
     const canvasCtx = canvasElement.getContext("2d");
     canvasCtx.font = "30px Arial";
 
+    canvasCtx.beginPath();
+    canvasCtx.rect(0,0,100,100);
+    canvasCtx.fillStyle = "red";
+    canvasCtx.fill();
+    canvasCtx.fillStyle = "black";
+    
     var width = canvasElement.width;
     var height = canvasElement.height;
 
@@ -94,7 +100,8 @@ const AromLateralFlexion = () => {
         mode = true;
         console.log(count);
       }
-      canvasCtx.fillText(angle, 200, 50);
+      canvasCtx.fillText(angle + "\xB0", 35, 60);
+      
     } else console.log("no detections");
   }
 

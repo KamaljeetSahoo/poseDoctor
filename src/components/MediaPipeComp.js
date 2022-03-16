@@ -24,6 +24,7 @@ const MediaPipeComp = () => {
     const canvasElement = canvasRef.current;
     const canvasCtx = canvasElement.getContext("2d");
     canvasCtx.font = "30px Arial";
+    
 
     var width = canvasElement.width;
     var height = canvasElement.height;
