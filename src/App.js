@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import './App.scss'
+import './App.css'
 import Squats from "./components/Squats";
 import Home from "./components/Home";
 import HandExtension from "./components/HandExtension";
