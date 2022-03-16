@@ -192,7 +192,7 @@ const AromLateralFlexion = () => {
           
         </Col>
       </Row>
-      <Row style={{ marginTop: 400 }}>Hello</Row>
+      <Row style={{ marginTop: 400 }}></Row>
     </div>
   );
 };

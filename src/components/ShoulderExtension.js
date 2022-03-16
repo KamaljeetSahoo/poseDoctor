@@ -7,6 +7,7 @@ import { Pose, POSE_CONNECTIONS, LandmarkGrid, PoseConfig } from '@mediapipe/pos
 import * as cam from '@mediapipe/camera_utils'
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
 import squatImg from './images/shoulder_ext.gif'
+import CanvasWebCam from './UI_Components/CanvasWebCam'
 
 
 //shoulder_exercise
@@ -166,37 +167,13 @@ const ShoulderExtension = () => {
 										Show Example
 									</Button>
 									<ModalComp/>
-									<Webcam
-									ref={webcamRef}
-									style={{
-											position: "absolute",
-											marginLeft: "0px",
-											marginRight: "0px",
-											textAlign: "center",
-											zindex: 9,
-											width: "400",
-											height: 'auto',
-											marginBottom: "0px",
-									}} />
-									<canvas
-									ref={canvasRef}
-									style={{
-											position: "absolute",
-											marginLeft: "0px",
-											marginRight: "0px",
-											textAlign: "center",
-											zindex: 9,
-											width: "400",
-											height: 'auto',
-											marginBottom: "0px"
-									}}>
-									</canvas>
+									<CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef}/>
                 </div>
             </Col>
-            <Col md={6} style={{position:'relative'}}>Hello</Col>
+            <Col md={6} style={{position:'relative'}}></Col>
         </Row>
 				<Row>
-					Hello
+					
 				</Row>
     </div>
   )
