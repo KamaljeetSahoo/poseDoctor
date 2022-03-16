@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/poseDoctor/static/css/main.f00b2dd6.css",
+    "main.js": "/poseDoctor/static/js/main.47e3bad3.js",
+    "static/js/787.4aee7be9.chunk.js": "/poseDoctor/static/js/787.4aee7be9.chunk.js",
+    "static/media/squats.gif": "/poseDoctor/static/media/squats.43db6b78d2af6f133acb.gif",
+    "static/media/lunges.gif": "/poseDoctor/static/media/lunges.43652cc98a7575a10d9d.gif",
+    "static/media/shoulder_ext.gif": "/poseDoctor/static/media/shoulder_ext.1fac7a8d18551ab474ba.gif",
+    "static/media/arom_flex.gif": "/poseDoctor/static/media/arom_flex.27c0d7b36a04c24f2a55.gif",
+    "static/media/arom_l_flex.gif": "/poseDoctor/static/media/arom_l_flex.b06970fa2a27ad8d3a5a.gif",
+    "index.html": "/poseDoctor/index.html",
+    "main.f00b2dd6.css.map": "/poseDoctor/static/css/main.f00b2dd6.css.map",
+    "main.47e3bad3.js.map": "/poseDoctor/static/js/main.47e3bad3.js.map",
+    "787.4aee7be9.chunk.js.map": "/poseDoctor/static/js/787.4aee7be9.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.f00b2dd6.css",
+    "static/js/main.47e3bad3.js"
+  ]
+}
