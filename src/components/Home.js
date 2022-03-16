@@ -12,25 +12,25 @@ const Home = () => {
           <ExerciseCard
             title={'Lunges'}
             imgLink={'https://blog.myfitnesspal.com/wp-content/uploads/2020/07/UACF-Lunges-Featured.jpg'}
-            link={'/poseDoctor/lunges'}/>
+            link={'/lunges'}/>
         </Col>
         <Col md={3}>
           <ExerciseCard
             title={'Squats'}
             imgLink={'https://post.healthline.com/wp-content/uploads/2019/03/Female_Squat_Studio_732x549-thumbnail-2.jpg'}
-            link={'/poseDoctor/squats'}/>
+            link={'/squats'}/>
         </Col>
         <Col md={3}>
           <ExerciseCard
             title={'Shoulder Extension'}
             imgLink={'https://cdn-prod.medicalnewstoday.com/content/images/articles/324/324647/man-doing-cross-body-shoulder-stretch-for-arm-warmup.jpg'}
-            link={'/poseDoctor/shoulderExtension'}/>
+            link={'/shoulderExtension'}/>
         </Col>
         <Col md={3}>
           <ExerciseCard
             title={'Hand Extension'}
             imgLink={'https://shoulderelbow.org/wp-content/uploads/2017/01/flexion-extension.jpg'}
-            link={'/poseDoctor/rightHandExtension'}/>
+            link={'/rightHandExtension'}/>
         </Col>
       </Row>
       <Row>
@@ -39,14 +39,14 @@ const Home = () => {
           <ExerciseCard
             title={'FLexion'}
             imgLink={'https://amactraining.co.uk/wp-content/uploads/2014/05/flexion-extension.png'}
-            link={'/poseDoctor/arom_flexion'}
+            link={'/arom_flexion'}
           />
         </Col>
         <Col md={4}>
           <ExerciseCard
             title={'Lateral Flexion'}
             imgLink={'https://robinsonsstrengthandendurancecoaching.files.wordpress.com/2016/03/stretch-14.jpg?w=663'}
-            link={'/poseDoctor/arom_lateral_flexion'}
+            link={'/arom_lateral_flexion'}
           />
         </Col>
       </Row>
@@ -56,7 +56,7 @@ const Home = () => {
           <ExerciseCard 
             title={'Pose Visibility'}
             imgLink={'https://viso.ai/wp-content/uploads/2021/01/Keypoints-Detected-by-OpenPose-on-the-COCO-Dataset.jpg'}
-            link={'/poseDoctor/check_visibility'}
+            link={'/check_visibilty'}
           />
         </Col>
       </Row>

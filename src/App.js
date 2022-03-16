@@ -20,17 +20,17 @@ function App() {
           <NavbarComp/>
           <div className="container mt-3">
             <Routes>
-              <Route exact path='/poseDoctor' element={<Home/>}/>
-              <Route exact path='/poseDoctor/squats' element={<Squats/>}/>
-              <Route exact path='/poseDoctor/handExtension' element={<HandExtension/>}/>
-              <Route exact path='/poseDoctor/demo' element={<MediaPipeComp/>}/>
-              <Route exact path='/poseDoctor/rightHandExtension' element={<RightHandExtension/>}/>
-              <Route exact path='/poseDoctor/timer' element={<Timer/>}/>
-              <Route exact path='/poseDoctor/lunges' element={<Lunges/>}/>
-              <Route exact path='/poseDoctor/arom_flexion' element={<AromFlexion/>}/>
-              <Route exact path='/poseDoctor/arom_lateral_flexion' element={<AromLateralFlexion/>}/>
-              <Route exact path='/poseDoctor/shoulderExtension' element={<ShoulderExtension/>}/>
-              <Route exact path='/poseDoctor/check_visibility' element={<CheckVisibility/>}/>
+              <Route exact path='/' element={<Home/>}/>
+              <Route exact path='/squats' element={<Squats/>}/>
+              <Route exact path='/handExtension' element={<HandExtension/>}/>
+              <Route exact path='/demo' element={<MediaPipeComp/>}/>
+              <Route exact path='/rightHandExtension' element={<RightHandExtension/>}/>
+              <Route exact path='/timer' element={<Timer/>}/>
+              <Route exact path='/lunges' element={<Lunges/>}/>
+              <Route exact path='/arom_flexion' element={<AromFlexion/>}/>
+              <Route exact path='/arom_lateral_flexion' element={<AromLateralFlexion/>}/>
+              <Route exact path='/shoulderExtension' element={<ShoulderExtension/>}/>
+              <Route exact path='/check_visibility' element={<CheckVisibility/>}/>
             </Routes>
           </div>
         </div>

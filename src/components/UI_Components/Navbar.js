@@ -11,12 +11,12 @@ const NavbarComp = () => {
 			<div>
         <Navbar color="faded" light>
 					<Container>
-						<NavbarBrand href="/poseDoctor" className="mr-auto" style={{fontFamily: 'Monoton', fontSize:'40px'}}>PoseDoc</NavbarBrand>
+						<NavbarBrand href="/" className="mr-auto" style={{fontFamily: 'Monoton', fontSize:'40px'}}>PoseDoc</NavbarBrand>
 						<NavbarToggler onClick={toggleNavbar} className="mr-2" />
 						<Collapse isOpen={!collapsed} navbar>
 							<Nav navbar>
 								<NavItem>
-									<NavLink href="/poseDoctor/demo">Demo</NavLink>
+									<NavLink href="/demo">Demo</NavLink>
 								</NavItem>
 									<UncontrolledDropdown nav inNavbar>
 										<DropdownToggle nav caret>
@@ -24,27 +24,27 @@ const NavbarComp = () => {
 										</DropdownToggle>
 										<DropdownMenu right>
 											<DropdownItem>
-												<NavLink href='/poseDoctor/squats'>
+												<NavLink href='/squats'>
 													Squats
 												</NavLink>
 											</DropdownItem>
 											<DropdownItem>
-												<NavLink href='/poseDoctor/handExtension'>
+												<NavLink href='/handExtension'>
 														Hand Extension
 												</NavLink>
 											</DropdownItem>
 											<DropdownItem>
-												<NavLink href='/poseDoctor/rightHandExtension'>
+												<NavLink href='/rightHandExtension'>
 														Right Hand Extension
 												</NavLink>
 											</DropdownItem>
 											<DropdownItem>
-												<NavLink href='/poseDoctor/lunges'>
+												<NavLink href='/lunges'>
 														Lunges
 												</NavLink>
 											</DropdownItem>
 											<DropdownItem>
-												<NavLink href='/poseDoctor/shoulderExtension'>
+												<NavLink href='/shoulderExtension'>
 														Shoulder Extension
 												</NavLink>
 											</DropdownItem>
@@ -56,12 +56,12 @@ const NavbarComp = () => {
 										</DropdownToggle>
 										<DropdownMenu right>
 											<DropdownItem>
-												<NavLink href='/poseDoctor/arom_flexion'>
+												<NavLink href='/arom_flexion'>
 														AROM Flexion
 												</NavLink>
 											</DropdownItem>
 											<DropdownItem>
-												<NavLink href='/poseDoctor/arom_lateral_flexion'>
+												<NavLink href='/arom_lateral_flexion'>
 														AROM Lateral Flexion
 												</NavLink>
 											</DropdownItem>
