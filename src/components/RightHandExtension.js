@@ -129,7 +129,13 @@ const RightHandExtension = () => {
   function poseEstimation(results) {
     const canvasElement = canvasRef.current;
     const canvasCtx = canvasElement.getContext("2d");
-    canvasCtx.font = "30px Arial";
+	  canvasCtx.font = "30px Arial";
+    canvasCtx.beginPath();
+    canvasCtx.rect(0,0,100,100);
+    canvasCtx.fillStyle = "red";
+    canvasCtx.fill();
+    canvasCtx.fillStyle = "black";
+    
 
     var width = canvasElement.width;
     var height = canvasElement.height;
@@ -180,7 +186,7 @@ const RightHandExtension = () => {
         mode = true;
       }
 
-      canvasCtx.fillText(count, 200, 50);
+      canvasCtx.fillText(count, 35, 60);
       if (count < adhere / 2) {
         message = "keep going";
       } else if (count === adhere / 2) {

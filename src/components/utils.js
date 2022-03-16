@@ -5,5 +5,5 @@ export function calculateAngles(a, b, c) {
   
 	  if (angle > 180.0)
 		angle = 360 - angle;
-	  return angle;
+	  return Math.round(angle);
 	}

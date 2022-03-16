@@ -29,6 +29,13 @@ const AromFlexion = () => {
     const canvasElement = canvasRef.current;
     const canvasCtx = canvasElement.getContext("2d");
     canvasCtx.font = "30px Arial";
+    canvasCtx.beginPath();
+    canvasCtx.rect(0,0,100,100);
+    canvasCtx.fillStyle = "red";
+    canvasCtx.fill();
+    canvasCtx.fillStyle = "black";
+    
+
 
     var width = canvasElement.width;
     var height = canvasElement.height;
@@ -80,7 +87,7 @@ const AromFlexion = () => {
         mode = true;
         console.log(count);
       }
-      canvasCtx.fillText(angle, 200, 50);
+      canvasCtx.fillText(angle + "\xB0", 35, 60);
     } else console.log("no detections");
 
     const vis_array = [];
