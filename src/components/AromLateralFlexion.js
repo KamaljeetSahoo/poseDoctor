@@ -1,14 +1,13 @@
-import React, { useRef, useEffect,useState } from "react";
-import { Button, Col, Modal, Row } from 'react-bootstrap'
+import React, { useRef, useEffect, useState } from "react";
+import { Button, Col, Modal, Row } from "react-bootstrap";
 
 import { joints } from "./Joints";
 import { Pose, POSE_CONNECTIONS } from "@mediapipe/pose";
 import * as cam from "@mediapipe/camera_utils";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import CanvasWebCam from "./UI_Components/CanvasWebCam";
-import squatImg from './images/arom_l_flex.gif'
-import { calculateAngles } from './utils'
-
+import squatImg from "./images/arom_l_flex.gif";
+import { calculateAngles } from "./utils";
 
 //back_right_sideways_stretch
 const AromLateralFlexion = () => {
@@ -24,7 +23,6 @@ const AromLateralFlexion = () => {
 
   var camera = null;
 
-
   function calculateAngle(b, c) {
     var radians = Math.atan2(c[1] - b[1], c[0] - b[0]);
     var angle = Math.abs((radians * 180.0) / Math.PI);
@@ -39,11 +37,11 @@ const AromLateralFlexion = () => {
     canvasCtx.font = "30px Arial";
 
     canvasCtx.beginPath();
-    canvasCtx.rect(0,0,100,100);
+    canvasCtx.rect(0, 0, 100, 100);
     canvasCtx.fillStyle = "red";
     canvasCtx.fill();
     canvasCtx.fillStyle = "black";
-    
+
     var width = canvasElement.width;
     var height = canvasElement.height;
 
@@ -101,7 +99,6 @@ const AromLateralFlexion = () => {
         console.log(count);
       }
       canvasCtx.fillText(angle + "\xB0", 35, 60);
-      
     } else console.log("no detections");
   }
 
@@ -169,33 +166,33 @@ const AromLateralFlexion = () => {
     }
   });
   const ModalComp = () => {
-		return (
-			<Modal show={show} onHide={handleClose}>
-				<Modal.Body>
-					<div>
-						<img className='img-fluid' src={squatImg} alt='squat'/>
-					</div>
-				</Modal.Body>
-			</Modal>
-		)
-	}
+    return (
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Body>
+          <div>
+            <img className="img-fluid" src={squatImg} alt="squat" />
+          </div>
+        </Modal.Body>
+      </Modal>
+    );
+  };
   return (
     <div>
       <Row>
         <Col md={6}>
           <div className="align-items-center justify-content-center">
-          <Button variant="primary" onClick={handleShow}>
-										Show Example
-									</Button>
-									<ModalComp/>
+            <Button variant="primary" onClick={handleShow}>
+              Show Example
+            </Button>
+            <ModalComp />
             <CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
           </div>
         </Col>
         <Col md={6} style={{ position: "relative" }}>
-          Hello
+          
         </Col>
       </Row>
-      <Row>Hello</Row>
+      <Row style={{ marginTop: 400 }}>Hello</Row>
     </div>
   );
 };

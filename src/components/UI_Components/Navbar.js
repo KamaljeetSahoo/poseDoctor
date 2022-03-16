@@ -11,7 +11,7 @@ const NavbarComp = () => {
 			<div>
         <Navbar color="faded" light>
 					<Container>
-						<NavbarBrand href="/" className="mr-auto">reactstrap</NavbarBrand>
+						<NavbarBrand href="/" className="mr-auto" style={{fontFamily: 'Monoton', fontSize:'40px'}}>PoseDoc</NavbarBrand>
 						<NavbarToggler onClick={toggleNavbar} className="mr-2" />
 						<Collapse isOpen={!collapsed} navbar>
 							<Nav navbar>

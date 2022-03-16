@@ -20,7 +20,7 @@ const CanvasWebCam = ({ webcamRef, canvasRef }) => {
 
   return (
     <div>
-      <button className="btn btn-primary mb-3" onClick={handleClick}>
+      <button className="btn btn-primary mb-3 mt-5" onClick={handleClick}>
         Switch camera
       </button>
       <div className="card">
