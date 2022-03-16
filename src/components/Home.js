@@ -50,6 +50,16 @@ const Home = () => {
           />
         </Col>
       </Row>
+      <Row>
+        <h2 className='font-weight-bold m-4'>Check Visibilty Score on Your Device</h2>
+        <Col md={4}>
+          <ExerciseCard 
+            title={'Pose Visibility'}
+            imgLink={'https://viso.ai/wp-content/uploads/2021/01/Keypoints-Detected-by-OpenPose-on-the-COCO-Dataset.jpg'}
+            link={'/check_visibility'}
+          />
+        </Col>
+      </Row>
       <Footer/>
     </div>
   )

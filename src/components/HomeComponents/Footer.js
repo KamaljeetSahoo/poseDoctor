@@ -8,6 +8,7 @@ const Footer = () => {
             <Row>
                 <Col md={6}>
                     <p className='display-1 m-5' style={{fontFamily:'Monoton'}}>PoseDoc</p>
+                    <p>By Team KAPS</p>
                 </Col>
                 <Col md={6} className='mt-5 mb-5'>
                     <a href='https://github.com/KamaljeetSahoo/poseDoctor'><img height={150} width={150} src='https://play-lh.googleusercontent.com/PCpXdqvUWfCW1mXhH1Y_98yBpgsWxuTSTofy3NGMo9yBTATDyzVkqU580bfSln50bFU' alt='github'/></a>
