@@ -56,7 +56,7 @@ const Home = () => {
           <ExerciseCard 
             title={'Pose Visibility'}
             imgLink={'https://viso.ai/wp-content/uploads/2021/01/Keypoints-Detected-by-OpenPose-on-the-COCO-Dataset.jpg'}
-            link={'/check_visibilty'}
+            link={'/check_visibility'}
           />
         </Col>
       </Row>
