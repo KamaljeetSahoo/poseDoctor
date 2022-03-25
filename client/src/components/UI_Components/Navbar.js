@@ -67,7 +67,7 @@ const NavbarComp = () => {
                   <DropdownToggle nav caret>
                     Exercises
                   </DropdownToggle>
-                  <DropdownMenu right>
+                  <DropdownMenu>
                     <DropdownItem>
                       <NavLink href="/squats">Squats</NavLink>
                     </DropdownItem>
@@ -93,7 +93,7 @@ const NavbarComp = () => {
                   <DropdownToggle nav caret>
                     AROM
                   </DropdownToggle>
-                  <DropdownMenu right>
+                  <DropdownMenu>
                     <DropdownItem>
                       <NavLink href="/arom_flexion">AROM Flexion</NavLink>
                     </DropdownItem>
