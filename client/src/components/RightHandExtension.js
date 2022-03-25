@@ -128,7 +128,6 @@ const RightHandExtension = () => {
   }
 
   function poseEstimation(results) {
-    console.log("pose estimate");
     const canvasElement = canvasRef.current;
     const canvasCtx = canvasElement.getContext("2d");
 	  canvasCtx.font = "30px Arial";
@@ -170,6 +169,8 @@ const RightHandExtension = () => {
         mid_joint.coord,
         end_joint.coord
       );
+
+      
 
       canvasCtx.fillText(
         mid_joint.name + " " + angle,
@@ -318,17 +319,17 @@ const RightHandExtension = () => {
   return (
     <div>
       <div className="mt-5">
-        <div class="row">
-          <div class="col-md-6">
+        <div className="row">
+          <div className="col-md-6">
             <div className="App">
               <h2>{timer}</h2>
-              <div class="form-group">
-                <label for="adhere">Adherence</label>
-                <input type="number" class="form-control" id="adhere" aria-describedby="emailHelp" placeholder="Adherence" />
+              <div className="form-group">
+                <label htmlFor="adhere">Adherence</label>
+                <input type="number" className="form-control" id="adhere" aria-describedby="emailHelp" placeholder="Adherence" />
               </div>
-              <div class="form-group">
-                <label for="time">Time in seconds</label>
-                <input type="number" class="form-control" id="time" aria-describedby="emailHelp" placeholder="Time in seconds" />
+              <div className="form-group">
+                <label htmlFor="time">Time in seconds</label>
+                <input type="number" className="form-control" id="time" aria-describedby="emailHelp" placeholder="Time in seconds" />
               </div>
 
               <button className="btn btn-success" onClick={onClickReset}>
@@ -336,9 +337,9 @@ const RightHandExtension = () => {
               </button>
               <h1>{count}</h1>
             </div>
-            <div class="text-danger font-weight-bold display-6"><p>{message}</p></div>
+            <div className="text-danger font-weight-bold display-6"><p>{message}</p></div>
           </div>
-          <div class="col-md-6">
+          <div className="col-md-6">
             <div>
               <Doughnut data={data} options={options} />
             </div>
