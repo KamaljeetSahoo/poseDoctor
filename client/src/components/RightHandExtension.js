@@ -10,13 +10,21 @@ import CanvasWebCam from "./UI_Components/CanvasWebCam";
 import squatImg from './images/squats.gif'
 
 
-var count = 0;
+// var count = 0;
 var mode = null;
-var adhere = 10;
+// var adhere = 10;
 var camera = null;
+var cnt=0;
 var message = "start excercise";
+var func = null;
 const RightHandExtension = () => {
   const [show, setShow] = useState(false);
+  const [count, setcount] = useState(0);
+  const [adhere, setadhere] = useState(0);
+
+  // const count = props.count;
+  // const setcount = props.setcount;
+  console.log("Rendering... ", count);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -51,18 +59,13 @@ const RightHandExtension = () => {
     },
   };
 
-  // const data = [
-  //     {name: 'Geeksforgeeks', students: 400},
-  //     {name: 'Technical scripter', students1: 700},
-  //     // {name: 'Geek-i-knack', students: 200},
-  //     // {name: 'Geek-o-mania', students: 1000}
-  //     ];
   const webcamRef = useRef(0);
   const canvasRef = useRef(0);
   const Ref = useRef(null);
 
   // The state for our timer
   const [timer, setTimer] = useState("00:00:00");
+  // var timer = "FFFF";
   const getTimeRemaining = (e) => {
     const total = Date.parse(e) - Date.parse(new Date());
     const seconds = Math.floor((total / 1000) % 60);
@@ -91,21 +94,19 @@ const RightHandExtension = () => {
       );
     }
   };
-  const clearTimer = (e) => {
-    // If you adjust it you should also need to
-    // adjust the Endtime formula we are about
-    // to code next
-    setTimer("00:00:20");
+  // const clearTimer = (e) => {
+  //   // If you adjust it you should also need to
+  //   // adjust the Endtime formula we are about
+  //   // to code next
+  //   // setTimer("00:00:20");
 
-    // If you try to remove this line the
-    // updating of timer Variable will be
-    // after 1000ms or 1sec
-    if (Ref.current) clearInterval(Ref.current);
-    const id = setInterval(() => {
-      startTimer(e);
-    }, 1000);
-    Ref.current = id;
-  };
+
+  //   if (Ref.current) clearInterval(Ref.current);
+  //   const id = setInterval(() => {
+  //     startTimer(e);
+  //   }, 1000);
+  //   Ref.current = id;
+  // };
 
   const getDeadTime = () => {
     let deadline = new Date();
@@ -127,6 +128,7 @@ const RightHandExtension = () => {
   }
 
   function poseEstimation(results) {
+    console.log("pose estimate");
     const canvasElement = canvasRef.current;
     const canvasCtx = canvasElement.getContext("2d");
 	  canvasCtx.font = "30px Arial";
@@ -176,17 +178,25 @@ const RightHandExtension = () => {
       );
 
       var high = 160;
-      var low = 30;
+      var low = 60;
 
       if (angle > high) {
         mode = false;
       }
       if (angle < low && mode == false) {
-        count += 1;
+        // count += 1; // prats
+        
+        setcount( prev => {
+          cnt=prev+1;
+          return prev + 1;
+        });
+        console.log("incrementing count ", cnt);
+
         mode = true;
       }
 
-      canvasCtx.fillText(count, 35, 60);
+      canvasCtx.fillText(cnt, 35, 60);
+      
       if (count < adhere / 2) {
         message = "keep going";
       } else if (count === adhere / 2) {
@@ -196,7 +206,8 @@ const RightHandExtension = () => {
       } else if (count < adhere) {
         message = "Very good!";
       }
-    } else console.log("no detections");
+      } else console.log("no detections");
+      
   }
 
   function onResults(results) {
@@ -235,7 +246,7 @@ const RightHandExtension = () => {
   }
 
   useEffect(() => {
-    clearTimer(getDeadTime());
+    // clearTimer(getDeadTime());
 
     const pose = new Pose({
       locateFile: (file) => {
@@ -272,12 +283,27 @@ const RightHandExtension = () => {
   }, []);
 
   const onClickReset = () => {
-    clearTimer(getDeadTime());
-    count = 0;
+    // clearTimer(getDeadTime());
+    setcount(0);
+    let time = document.getElementById("time").value;
+    setTimer(`${parseInt(time/3600)}:${parseInt(time/60)}:${time}`);
+    let adhere_ = document.getElementById("adhere").value;
+    setadhere(adhere_);
+    console.log("=> ", time, adhere_);
+    clearInterval(func);
+    func = setInterval(() => {
+      setTimer(cur => {
+        let c_ar = cur.split(":");
+        let ts = parseInt(c_ar[0]) * 3600 + parseInt(c_ar[1]) * 60 + parseInt(c_ar[2]) ;
+        console.log("==> ", c_ar, ts);
+        ts -= 1;
+        if(ts < 0) ts = 0;
+        return `${parseInt(ts/3600)}:${parseInt(ts/60)}:${ts}`;
+      })
+    }, 1000);
   };
-  if (timer == "00:00:00") {
-    console.log(count);
-  }
+
+
   const ModalComp = () => {
 		return (
 			<Modal show={show} onHide={handleClose}>
@@ -296,10 +322,19 @@ const RightHandExtension = () => {
           <div class="col-md-6">
             <div className="App">
               <h2>{timer}</h2>
+              <div class="form-group">
+                <label for="adhere">Adherence</label>
+                <input type="number" class="form-control" id="adhere" aria-describedby="emailHelp" placeholder="Adherence" />
+              </div>
+              <div class="form-group">
+                <label for="time">Time in seconds</label>
+                <input type="number" class="form-control" id="time" aria-describedby="emailHelp" placeholder="Time in seconds" />
+              </div>
+
               <button className="btn btn-success" onClick={onClickReset}>
                 Reset
               </button>
-              
+              <h1>{count}</h1>
             </div>
             <div class="text-danger font-weight-bold display-6"><p>{message}</p></div>
           </div>
