@@ -148,6 +148,7 @@ const RightHandExtension = () => {
           results.poseLandmarks[joints.right_shoulder].x,
           results.poseLandmarks[joints.right_shoulder].y,
         ],
+        visibility: results.poseLandmarks[joints.right_shoulder].visibility
       };
       var mid_joint = {
         name: "right_elbow",
@@ -170,7 +171,28 @@ const RightHandExtension = () => {
         end_joint.coord
       );
 
-      
+      if(first_joint.visibility > 0.99){
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(0,0);
+        canvasCtx.lineTo(canvasElement.width, 0);
+        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
+        canvasCtx.lineTo(0, canvasElement.height);
+        canvasCtx.lineTo(0, 0);
+        canvasCtx.lineWidth = 15;
+        canvasCtx.strokeStyle = "#80e885"
+        canvasCtx.stroke();
+      }
+      else{
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(0,0);
+        canvasCtx.lineTo(canvasElement.width, 0);
+        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
+        canvasCtx.lineTo(0, canvasElement.height);
+        canvasCtx.lineTo(0, 0);
+        canvasCtx.lineWidth = 15;
+        canvasCtx.strokeStyle = "#ed4c4c"
+        canvasCtx.stroke();
+      }
 
       canvasCtx.fillText(
         mid_joint.name + " " + angle,
