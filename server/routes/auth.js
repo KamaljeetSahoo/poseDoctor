@@ -90,5 +90,14 @@ router.post(
   }
 );
 
+router.get("/getUser", fetchUser, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    res.send(user);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).send("Oops internal server error occured");
+  }
+});
 
 module.exports = router;

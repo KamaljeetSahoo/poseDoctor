@@ -33,7 +33,7 @@ const Login = () => {
       localStorage.setItem("email", json.user.email);
       console.log(json.user.email);
       navigate("/profile");
-    } else navigate("/");
+    } else navigate("/login");
   };
 
   return (
