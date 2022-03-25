@@ -47,5 +47,48 @@ router.post("/register", async (req, res) => {
   }
 });
 
+router.post(
+  "/login",
+  body("email", "Enter a valid email").isEmail(),
+  async (req, res) => {
+    let success = false;
+    console.log("inside login");
+    // Finds the validation errors in this request and wraps them in an object with handy functions
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ success, errors: errors.array() });
+    }
+    const { email, password } = req.body;
+    try {
+      //check whether user with this email exists
+      let user = await User.findOne({ email });
+      if (!user) {
+        return res.status(400).send({
+          success,
+          error: "Please try to login with correct credentials",
+        });
+      }
+      const passwordCompare = await bcrypt.compare(password, user.password);
+      if (!passwordCompare) {
+        return res.status(400).send({
+          success,
+          error: "Please try to login with correct credentials",
+        });
+      }
+      const data = {
+        session: {
+          id: user.id,
+        },
+      };
+      const authToken = jwt.sign(data, JWT_SECRET);
+      success = true;
+      res.json({ success, authToken, user });
+    } catch (error) {
+      console.log(error.message);
+      res.status(500).send("Oops internal server error occured");
+    }
+  }
+);
+
 
 module.exports = router;

@@ -19,6 +19,9 @@ import CheckVisibility from "./components/CheckVisibility";
 import Login from './components/Auth/Login'
 import Register from './components/Auth/Register'
 
+//User Profile imports
+import Profile from './components/Users/Profile'
+
 function App() {
   return (
       <Router>
@@ -29,6 +32,7 @@ function App() {
               <Route exact path='/' element={<Home/>}/>
               <Route exact path="/login" element={<Login/>}/>
               <Route exact path="/register" element={<Register/>}/>
+              <Route exact path="/profile" element={<Profile/>}/>
               <Route exact path='/squats' element={<Squats/>}/>
               <Route exact path='/handExtension' element={<HandExtension/>}/>
               <Route exact path='/demo' element={<MediaPipeComp/>}/>

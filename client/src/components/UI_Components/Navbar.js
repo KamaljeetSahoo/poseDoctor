@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   Collapse,
   Container,
@@ -19,6 +21,14 @@ const NavbarComp = () => {
   function toggleNavbar() {
     setCollapsed(!collapsed);
   }
+  let navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    navigate("/login");
+  };
+
   return (
     <div>
       <div>
@@ -34,12 +44,22 @@ const NavbarComp = () => {
             <NavbarToggler onClick={toggleNavbar} className="mr-2" />
             <Collapse isOpen={!collapsed} navbar>
               <Nav navbar>
-			  	<NavItem>
-                  <NavLink href="/register">Register</NavLink>
-                </NavItem>
-				<NavItem>
-                  <NavLink href="/login">Login</NavLink>
-                </NavItem>
+                {!localStorage.getItem("token") ? (
+                  <>
+                    <NavItem>
+                      <NavLink href="/register">Register</NavLink>
+                    </NavItem>
+                    <NavItem>
+                      <NavLink href="/login">Login</NavLink>
+                    </NavItem>
+                  </>
+                ) : (
+                  <NavItem>
+                    <button onClick={handleLogout} className="btn btn-primary">
+                      LOGOUT
+                    </button>
+                  </NavItem>
+                )}
                 <NavItem>
                   <NavLink href="/demo">Demo</NavLink>
                 </NavItem>
