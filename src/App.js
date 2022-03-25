@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import './App.css'
+
+//exercise imports
 import Squats from "./components/Squats";
 import Home from "./components/Home";
 import HandExtension from "./components/HandExtension";
@@ -13,6 +15,10 @@ import AromLateralFlexion from './components/AromLateralFlexion';
 import ShoulderExtension from './components/ShoulderExtension';
 import CheckVisibility from "./components/CheckVisibility";
 
+//authentication component imports
+import Login from './components/Auth/Login'
+import Register from './components/Auth/Register'
+
 function App() {
   return (
       <Router>
@@ -21,6 +27,8 @@ function App() {
           <div className="container mt-3">
             <Routes>
               <Route exact path='/' element={<Home/>}/>
+              <Route exact path="/login" element={<Login/>}/>
+              <Route exact path="/register" element={<Register/>}/>
               <Route exact path='/squats' element={<Squats/>}/>
               <Route exact path='/handExtension' element={<HandExtension/>}/>
               <Route exact path='/demo' element={<MediaPipeComp/>}/>
