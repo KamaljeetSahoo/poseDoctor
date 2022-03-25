@@ -9,20 +9,47 @@ const Register = () => {
         email:"",
         password:"",
     })
+    const [error, setError] = useState(null)
 
     const handleChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
       };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const {name, email, password} = credentials;
         console.log("submission", name, email, password)
-    }
+
+        const response = await fetch(`http://localhost:5001/api/auth/register`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name,
+                email,
+                password,
+            }),
+        });
+        
+        const json = await response.json();
+        if (json.success) {
+        // save tha uth and redirect
+            localStorage.setItem("token", json.authToken);
+            localStorage.setItem("email", json.user.email);
+            navigate("/");
+            setError("Account Created Succesfully", "success");
+            } else {
+            setError("Invalid Details", "danger");
+        }
+  };
+
   return (
     <div>
         <Row className='mt-4'>
-            <Col md={2}></Col>
+            <Col md={2}>
+                {error && <h2 style={{color:"red"}}>{error}</h2>}
+            </Col>
             <Col className='mt-4'>
                 <Card className='rounded-5 p-5'>
                     <Card.Body>
