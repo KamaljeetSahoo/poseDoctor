@@ -5,7 +5,7 @@ import * as cam from "@mediapipe/camera_utils";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { Doughnut } from "react-chartjs-2";
 import { joints } from "./Joints";
-import CanvasWebCam from "./UI_Components/CanvasWebCam";
+import CanvasWebCamFixed from "./UI_Components/CanvasWebCamFixed";
 import squatImg from "./images/squats.gif";
 
 // var count = 0;
@@ -15,10 +15,29 @@ var camera = null;
 var cnt = 0;
 var message = "start excercise";
 var func = null;
+const options = {
+  responsive: true,
+  maintainAspectRatio: true,
+  plugins: {
+    title: {
+      display: true,
+      text: "Doughnut Chart",
+      color: "blue",
+      font: {
+        size: 18,
+      },
+      responsive: true,
+      animation: {
+        animateScale: true,
+      },
+    },
+  },
+};
 const RightHandExtensionFixed = () => {
   const [show, setShow] = useState(false);
   const [count, setcount] = useState(0);
   const [adhere, setadhere] = useState(0);
+  const switchCamFunction = useRef(null);
 
   // const count = props.count;
   // const setcount = props.setcount;
@@ -37,24 +56,6 @@ const RightHandExtensionFixed = () => {
         pointBackgroundColor: "rgba(255,206,86,0.2)",
       },
     ],
-  };
-  const options = {
-    responsive: true,
-    maintainAspectRatio: true,
-    plugins: {
-      title: {
-        display: true,
-        text: "Doughnut Chart",
-        color: "blue",
-        font: {
-          size: 18,
-        },
-        responsive: true,
-        animation: {
-          animateScale: true,
-        },
-      },
-    },
   };
 
   const webcamRef = useRef(0);
@@ -241,11 +242,6 @@ const RightHandExtensionFixed = () => {
       });
       camera.start();
     }
-
-    // Another way to call the clearTimer() to start
-    // the countdown is via action event from the
-    // button first we create function to be called
-    // by the button
   }, []);
 
   const onClickReset = () => {
@@ -284,34 +280,43 @@ const RightHandExtensionFixed = () => {
   return (
     <div>
       <div className="mt-5">
-        <div className="row">
+      <div className="justify-content-center">
+          <Button variant="primary" onClick={handleShow} className="m-1">
+            Show Example
+          </Button>
+          <Button variant="primary" onClick={() => switchCamFunction.current()} className="m-1">
+            Switch Camera
+          </Button>
+          <ModalComp />
+          <CanvasWebCamFixed
+            webcamRef={webcamRef}
+            canvasRef={canvasRef}
+            switchCamFunction={switchCamFunction}
+          />
+        </div>
+        <div className="row align-items-center">
           <div className="col-md-6">
             <div className="App">
               <h2>{timer}</h2>
-              <div className="form-group">
-                <label htmlFor="adhere">Adherence</label>
+              <div className="form-group d-flex justify-content-between">
                 <input
                   type="number"
-                  className="form-control"
+                  className="form-control m-1"
                   id="adhere"
                   aria-describedby="emailHelp"
                   placeholder="Adherence"
                 />
-              </div>
-              <div className="form-group">
-                <label htmlFor="time">Time in seconds</label>
                 <input
                   type="number"
-                  className="form-control"
+                  className="form-control m-1"
                   id="time"
                   aria-describedby="emailHelp"
                   placeholder="Time in seconds"
                 />
+                <button className="btn btn-success" onClick={onClickReset}>
+                  Start
+                </button>
               </div>
-
-              <button className="btn btn-success" onClick={onClickReset}>
-                Reset
-              </button>
               <h1>{count}</h1>
             </div>
             <div className="text-danger font-weight-bold display-6">
@@ -324,22 +329,7 @@ const RightHandExtensionFixed = () => {
             </div>
           </div>
         </div>
-        <div className="align-items-center justify-content-center">
-          <Button variant="primary" onClick={handleShow}>
-            Show Example
-          </Button>
-          <Button variant="primary">
-              Switch Camera
-          </Button>
-          <ModalComp />
-          <CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
-        </div>
       </div>
-
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>{count}</p>
     </div>
   );
 };
