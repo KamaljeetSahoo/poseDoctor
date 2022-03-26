@@ -8,9 +8,7 @@ import { joints } from "./Joints";
 import CanvasWebCamFixed from "./UI_Components/CanvasWebCamFixed";
 import squatImg from "./images/squats.gif";
 
-// var count = 0;
 var mode = null;
-// var adhere = 10;
 var camera = null;
 var cnt = 0;
 var message = "start excercise";
@@ -39,12 +37,9 @@ const RightHandExtensionFixed = () => {
   const [adhere, setadhere] = useState(0);
   const switchCamFunction = useRef(null);
 
-  // const count = props.count;
-  // const setcount = props.setcount;
-  console.log("Rendering... ", count);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  
   const data = {
     labels: ["Adherence", "rem"],
     datasets: [
@@ -333,41 +328,6 @@ const RightHandExtensionFixed = () => {
             </div>
           </Col>
         </Row>
-        {/* <div className="row align-items-center">
-          <div className="col-md-6">
-            <div className="App">
-              <h2>{timer}</h2>
-              <div className="form-group d-flex justify-content-between">
-                <input
-                  type="number"
-                  className="form-control m-1"
-                  id="adhere"
-                  aria-describedby="emailHelp"
-                  placeholder="Adherence"
-                />
-                <input
-                  type="number"
-                  className="form-control m-1"
-                  id="time"
-                  aria-describedby="emailHelp"
-                  placeholder="Time in seconds"
-                />
-                <button className="btn btn-success" onClick={onClickReset}>
-                  Start
-                </button>
-              </div>
-              <h1>{count}</h1>
-            </div>
-            <div className="text-danger font-weight-bold display-6">
-              <p>{message}</p>
-            </div>
-          </div>
-          <div className="col-md-6">
-            <div>
-              <Doughnut data={data} options={options} />
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );
