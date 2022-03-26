@@ -15,12 +15,17 @@ import AromLateralFlexion from './components/AromLateralFlexion';
 import ShoulderExtension from './components/ShoulderExtension';
 import CheckVisibility from "./components/CheckVisibility";
 
+import RightHandExtensionFixed from "./components/RightHandExtensionFixed";
+
+
 //authentication component imports
 import Login from './components/Auth/Login'
 import Register from './components/Auth/Register'
+import Landing from "./components/Landing";
 
 //User Profile imports
 import Profile from './components/Users/Profile'
+
 
 function App() {
   return (
@@ -30,6 +35,7 @@ function App() {
           <div className="container mt-3">
             <Routes>
               <Route exact path='/' element={<Home/>}/>
+              <Route exact path='/poseDoc' element={<Landing/>}/>
               <Route exact path="/login" element={<Login/>}/>
               <Route exact path="/register" element={<Register/>}/>
               <Route exact path="/profile" element={<Profile/>}/>
@@ -37,6 +43,7 @@ function App() {
               <Route exact path='/handExtension' element={<HandExtension/>}/>
               <Route exact path='/demo' element={<MediaPipeComp/>}/>
               <Route exact path='/rightHandExtension' element={<RightHandExtension/>}/>
+              <Route exact path='/rightHandExtensionFixed' element={<RightHandExtensionFixed/>}/>
               <Route exact path='/timer' element={<Timer/>}/>
               <Route exact path='/lunges' element={<Lunges/>}/>
               <Route exact path='/arom_flexion' element={<AromFlexion/>}/>
