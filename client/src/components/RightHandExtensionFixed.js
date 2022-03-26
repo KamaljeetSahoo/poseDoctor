@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Pose, POSE_CONNECTIONS } from "@mediapipe/pose";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Col, Modal, Row } from "react-bootstrap";
 import * as cam from "@mediapipe/camera_utils";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { Doughnut } from "react-chartjs-2";
@@ -258,7 +258,7 @@ const RightHandExtensionFixed = () => {
         let c_ar = cur.split(":");
         let ts =
           parseInt(c_ar[0]) * 3600 + parseInt(c_ar[1]) * 60 + parseInt(c_ar[2]);
-        console.log("==> ", c_ar, ts);
+        // console.log("==> ", c_ar, ts);
         ts -= 1;
         if (ts < 0) ts = 0;
         return `${parseInt(ts / 3600)}:${parseInt(ts / 60)}:${ts}`;
@@ -279,22 +279,61 @@ const RightHandExtensionFixed = () => {
   };
   return (
     <div>
+      <ModalComp />
       <div className="mt-5">
-      <div className="justify-content-center">
-          <Button variant="primary" onClick={handleShow} className="m-1">
-            Show Example
-          </Button>
-          <Button variant="primary" onClick={() => switchCamFunction.current()} className="m-1">
-            Switch Camera
-          </Button>
-          <ModalComp />
-          <CanvasWebCamFixed
-            webcamRef={webcamRef}
-            canvasRef={canvasRef}
-            switchCamFunction={switchCamFunction}
-          />
-        </div>
-        <div className="row align-items-center">
+        <Row>
+          <Col md={6}>
+            <div className="text-center">
+              <Button variant="primary" onClick={handleShow} className="m-1">
+                Show Example
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => switchCamFunction.current()}
+                className="m-1"
+              >
+                Switch Camera
+              </Button>
+              <CanvasWebCamFixed
+                webcamRef={webcamRef}
+                canvasRef={canvasRef}
+                switchCamFunction={switchCamFunction}
+              />
+            </div>
+          </Col>
+          <Col md={6}>
+            <h2>{timer}</h2>
+            <div className="form-group d-flex justify-content-between">
+              <input
+                type="number"
+                className="form-control m-1"
+                id="adhere"
+                aria-describedby="emailHelp"
+                placeholder="Adherence"
+              />
+              <input
+                type="number"
+                className="form-control m-1"
+                id="time"
+                aria-describedby="emailHelp"
+                placeholder="Time in seconds"
+              />
+              <button className="btn btn-success" onClick={onClickReset}>
+                Start
+              </button>
+            </div>
+            <div className="d-flex justify-content-between">
+              <h1>{count}</h1>
+              <div className="text-danger font-weight-bold display-6">
+                <p>{message}</p>
+              </div>
+            </div>
+            <div>
+              <Doughnut data={data} options={options} />
+            </div>
+          </Col>
+        </Row>
+        {/* <div className="row align-items-center">
           <div className="col-md-6">
             <div className="App">
               <h2>{timer}</h2>
@@ -328,7 +367,7 @@ const RightHandExtensionFixed = () => {
               <Doughnut data={data} options={options} />
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
