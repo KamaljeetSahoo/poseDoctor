@@ -17,6 +17,8 @@ var camera = null;
 var cnt=0;
 var message = "start excercise";
 var func = null;
+var guide = 0;
+
 const RightHandExtension = () => {
   const [show, setShow] = useState(false);
   const [count, setcount] = useState(0);
@@ -129,6 +131,7 @@ const RightHandExtension = () => {
   };
 
   function poseEstimation(results) {
+
     // console.log("pose estimate");
     const canvasElement = canvasRef.current;
     const canvasCtx = canvasElement.getContext("2d");
@@ -138,7 +141,6 @@ const RightHandExtension = () => {
     canvasCtx.fillStyle = "red";
     canvasCtx.fill();
     canvasCtx.fillStyle = "black";
-    
 
     var width = canvasElement.width;
     var height = canvasElement.height;
@@ -171,14 +173,14 @@ const RightHandExtension = () => {
         mid_joint.coord,
         end_joint.coord
       );
-      
+
       var Pt1 = [first_joint.coord[0] * width, first_joint.coord[1] * height];
       var Pt2 = [mid_joint.coord[0] * width, mid_joint.coord[1] * height];
       var Pt3 = [end_joint.coord[0] * width, end_joint.coord[1] * height];
       var Pts = [Pt1, Pt2, Pt3];
-      console.log("==> F:", Pt1, " M: ", Pt2, " E: ", Pt3);
+      // console.log("==> F:", Pt1, " M: ", Pt2, " E: ", Pt3);
 
-      console.log("[0-1] => ", first_joint.coord,mid_joint.coord,end_joint.coord,180);
+      // console.log("[0-1] => ", first_joint.coord,mid_joint.coord,end_joint.coord,180);
       // console.log(point[0]*width,point[1]*height);
       // y-coord adjust
       for(let i = 0; i<3; i+=1){
@@ -186,9 +188,56 @@ const RightHandExtension = () => {
       }
       // const point=rotate(first_joint.coord,mid_joint.coord,end_joint.coord,20) ;
       // const point=rotate(Pts[0],Pts[1],Pts[2],30) ;
-      const point = ghoom_jao(Pts[1], Pts[0], 60);
+      var high = 135;
+      var low = 60;
+
+      var point_angle=low;
+      var color="#FFFFFF";
+
+  
+        if(angle<=low && !guide){
+          guide=1;
+          color="#18F22E";
+          point_angle=low;
+        }
+        else if(!guide && angle>low)
+          {
+            color="#FFFFFF";
+            point_angle=low;
+          }
+        else if(guide==1 && angle<=low)
+            {
+              color="#18F22E";
+            }  
+        else if(guide==1 && angle>low && angle<high)
+          {
+            guide=1;
+            point_angle=high;
+            color="#FFFFFF";
+          }
+        else if(guide==1 && angle>=high)
+          {
+            guide=2;
+            color="#18F22E";
+            point_angle=high;
+          } 
+        else if(guide==2 && angle>=high)
+          {
+            guide=2;
+            color="#18F22E";
+            point_angle=high;
+          }   
+        else if(guide==2 && angle<high)
+          {
+            guide=0;
+            point_angle=low;
+            color="#FFFFFF";
+          }      
+
+      console.log("guide: ",guide," point: ",point_angle," color: ",color);  
+      const point = ghoom_jao(Pts[1], Pts[0], point_angle);
       point[1] *= -1;
-      console.log("Point : ", point, " Org : ", Pts[1]);
+      // console.log("Point : ", point, " Org : ", Pts[1]);
 
       // back to original
       for(let i = 0; i<3; i+=1){
@@ -196,32 +245,34 @@ const RightHandExtension = () => {
       }
 
       canvasCtx.beginPath();
-      // canvasCtx.moveTo(mid_joint.coord[0]*width, mid_joint.coord[1]*height);
-      // canvasCtx.lineTo(point[0]*width,point[1]*height);
-      // new --
       canvasCtx.moveTo(Pts[1][0], Pts[1][1]);
       canvasCtx.lineTo(point[0],point[1]);
       canvasCtx.lineWidth = 7;
-      canvasCtx.strokeStyle = "#FF0000"; 
-      
-      // canvasCtx.moveTo(mid_joint.coord[0], mid_joint.coord[1]);
-      // canvasCtx.lineTo(point[0],point[1]);      
+      canvasCtx.strokeStyle = "#FF0000";    
       canvasCtx.stroke();  
-
+      
       canvasCtx.fillText(
         "point",
         point[0] * width,
         point[1] * height
-      );
-
+      );    
       canvasCtx.fillText(
         mid_joint.name + " " + angle,
         mid_joint.coord[0] * width,
         mid_joint.coord[1] * height
       );
 
-      var high = 160;
-      var low = 60;
+      drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+        color: color,
+        lineWidth: 2,
+      });
+      // The dots are the landmarks
+      drawLandmarks(canvasCtx, results.poseLandmarks, {
+        color: color,
+        lineWidth: 2,
+        radius: 2,
+      });  
+
 
       if (angle > high) {
         mode = false;
@@ -237,6 +288,7 @@ const RightHandExtension = () => {
 
         mode = true;
       }
+
 
       canvasCtx.fillText(cnt, 35, 60);
       
@@ -268,16 +320,7 @@ const RightHandExtension = () => {
       canvasElement.width,
       canvasElement.height
     );
-    drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
-      color: "#FFFFFF",
-      lineWidth: 2,
-    });
-    // The dots are the landmarks
-    drawLandmarks(canvasCtx, results.poseLandmarks, {
-      color: "#FFFFFF",
-      lineWidth: 2,
-      radius: 2,
-    });
+    
     // console.log("dot landmarks:",results.poseLandmarks);
     // drawLandmarks(canvasCtx, results.poseWorldLandmarks, {
     //   color: "#FFFFFF",
@@ -342,7 +385,7 @@ const RightHandExtension = () => {
       setTimer(cur => {
         let c_ar = cur.split(":");
         let ts = parseInt(c_ar[0]) * 3600 + parseInt(c_ar[1]) * 60 + parseInt(c_ar[2]) ;
-        console.log("==> ", c_ar, ts);
+        // console.log("==> ", c_ar, ts);
         ts -= 1;
         if(ts < 0) ts = 0;
         return `${parseInt(ts/3600)}:${parseInt(ts/60)}:${ts}`;
