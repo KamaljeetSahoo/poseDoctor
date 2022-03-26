@@ -22,9 +22,6 @@ const RightHandExtension = () => {
   const [count, setcount] = useState(0);
   const [adhere, setadhere] = useState(0);
 
-  // const count = props.count;
-  // const setcount = props.setcount;
-  console.log("Rendering... ", count);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -65,7 +62,6 @@ const RightHandExtension = () => {
 
   // The state for our timer
   const [timer, setTimer] = useState("00:00:00");
-  // var timer = "FFFF";
   const getTimeRemaining = (e) => {
     const total = Date.parse(e) - Date.parse(new Date());
     const seconds = Math.floor((total / 1000) % 60);
@@ -82,9 +78,6 @@ const RightHandExtension = () => {
     let { total, hours, minutes, seconds } = getTimeRemaining(e);
 
     if (total >= 0) {
-      // update the timer
-      // check if less than 10 then we need to
-      // add '0' at the begining of the variable
       setTimer(
         (hours > 19 ? hours : "0" + hours) +
           ":" +
@@ -94,25 +87,10 @@ const RightHandExtension = () => {
       );
     }
   };
-  // const clearTimer = (e) => {
-  //   // If you adjust it you should also need to
-  //   // adjust the Endtime formula we are about
-  //   // to code next
-  //   // setTimer("00:00:20");
-
-
-  //   if (Ref.current) clearInterval(Ref.current);
-  //   const id = setInterval(() => {
-  //     startTimer(e);
-  //   }, 1000);
-  //   Ref.current = id;
-  // };
 
   const getDeadTime = () => {
     let deadline = new Date();
 
-    // This is where you need to adjust if
-    // you entend to add more time
     deadline.setSeconds(deadline.getSeconds() + 20);
     return deadline;
   };
@@ -127,7 +105,31 @@ const RightHandExtension = () => {
     return angle;
   }
 
+  const rotate=(a,b,c,angle)=>{
+
+    var xnew = Math.cos(angle) * (a[0] - b[0]) - Math.sin(angle) * (a[1] - b[1]) + b[0];
+    var ynew = Math.sin(angle) * (a[0] - b[0]) + Math.cos(angle) * (a[1] - b[1]) + b[1];    
+
+    const point=[xnew,ynew];    
+    
+    return point;
+  }
+
+  function degrees_to_radians(degrees)
+  {
+    var pi = Math.PI;
+    return degrees * (pi/180);
+  }
+
+  const ghoom_jao = (o, p, ang) => {
+    let cos_theta = Math.cos(degrees_to_radians(ang)), sin_theta = Math.sin(degrees_to_radians(ang));
+    let x = cos_theta * (p[0] - o[0]) - sin_theta * (p[1] - o[1]) + o[0];
+    let y = sin_theta * (p[0] - o[0]) + cos_theta * (p[1] - o[1]) + o[1];
+    return [x, y];
+  };
+
   function poseEstimation(results) {
+    // console.log("pose estimate");
     const canvasElement = canvasRef.current;
     const canvasCtx = canvasElement.getContext("2d");
 	  canvasCtx.font = "30px Arial";
@@ -148,7 +150,6 @@ const RightHandExtension = () => {
           results.poseLandmarks[joints.right_shoulder].x,
           results.poseLandmarks[joints.right_shoulder].y,
         ],
-        visibility: results.poseLandmarks[joints.right_shoulder].visibility
       };
       var mid_joint = {
         name: "right_elbow",
@@ -170,29 +171,48 @@ const RightHandExtension = () => {
         mid_joint.coord,
         end_joint.coord
       );
+      
+      var Pt1 = [first_joint.coord[0] * width, first_joint.coord[1] * height];
+      var Pt2 = [mid_joint.coord[0] * width, mid_joint.coord[1] * height];
+      var Pt3 = [end_joint.coord[0] * width, end_joint.coord[1] * height];
+      var Pts = [Pt1, Pt2, Pt3];
+      console.log("==> F:", Pt1, " M: ", Pt2, " E: ", Pt3);
 
-      if(first_joint.visibility > 0.99){
-        canvasCtx.beginPath();
-        canvasCtx.moveTo(0,0);
-        canvasCtx.lineTo(canvasElement.width, 0);
-        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
-        canvasCtx.lineTo(0, canvasElement.height);
-        canvasCtx.lineTo(0, 0);
-        canvasCtx.lineWidth = 15;
-        canvasCtx.strokeStyle = "#80e885"
-        canvasCtx.stroke();
+      console.log("[0-1] => ", first_joint.coord,mid_joint.coord,end_joint.coord,180);
+      // console.log(point[0]*width,point[1]*height);
+      // y-coord adjust
+      for(let i = 0; i<3; i+=1){
+        Pts[i][1] *= -1;
       }
-      else{
-        canvasCtx.beginPath();
-        canvasCtx.moveTo(0,0);
-        canvasCtx.lineTo(canvasElement.width, 0);
-        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
-        canvasCtx.lineTo(0, canvasElement.height);
-        canvasCtx.lineTo(0, 0);
-        canvasCtx.lineWidth = 15;
-        canvasCtx.strokeStyle = "#ed4c4c"
-        canvasCtx.stroke();
+      // const point=rotate(first_joint.coord,mid_joint.coord,end_joint.coord,20) ;
+      // const point=rotate(Pts[0],Pts[1],Pts[2],30) ;
+      const point = ghoom_jao(Pts[1], Pts[0], 60);
+      point[1] *= -1;
+      console.log("Point : ", point, " Org : ", Pts[1]);
+
+      // back to original
+      for(let i = 0; i<3; i+=1){
+        Pts[i][1] *= -1;
       }
+
+      canvasCtx.beginPath();
+      // canvasCtx.moveTo(mid_joint.coord[0]*width, mid_joint.coord[1]*height);
+      // canvasCtx.lineTo(point[0]*width,point[1]*height);
+      // new --
+      canvasCtx.moveTo(Pts[1][0], Pts[1][1]);
+      canvasCtx.lineTo(point[0],point[1]);
+      canvasCtx.lineWidth = 7;
+      canvasCtx.strokeStyle = "#FF0000"; 
+      
+      // canvasCtx.moveTo(mid_joint.coord[0], mid_joint.coord[1]);
+      // canvasCtx.lineTo(point[0],point[1]);      
+      canvasCtx.stroke();  
+
+      canvasCtx.fillText(
+        "point",
+        point[0] * width,
+        point[1] * height
+      );
 
       canvasCtx.fillText(
         mid_joint.name + " " + angle,
@@ -213,7 +233,7 @@ const RightHandExtension = () => {
           cnt=prev+1;
           return prev + 1;
         });
-        console.log("incrementing count ", cnt);
+        // console.log("incrementing count ", cnt);
 
         mode = true;
       }
@@ -258,11 +278,14 @@ const RightHandExtension = () => {
       lineWidth: 2,
       radius: 2,
     });
-    drawLandmarks(canvasCtx, results.poseWorldLandmarks, {
-      color: "#FFFFFF",
-      lineWidth: 2,
-      radius: 2,
-    });
+    // console.log("dot landmarks:",results.poseLandmarks);
+    // drawLandmarks(canvasCtx, results.poseWorldLandmarks, {
+    //   color: "#FFFFFF",
+    //   lineWidth: 2,
+    //   radius: 2,
+    // });
+
+    // console.log("landmarks:",results.poseWorldLandmarks);
 
     poseEstimation(results);
     canvasCtx.restore();
@@ -308,11 +331,12 @@ const RightHandExtension = () => {
   const onClickReset = () => {
     // clearTimer(getDeadTime());
     setcount(0);
+    cnt=0;
     let time = document.getElementById("time").value;
     setTimer(`${parseInt(time/3600)}:${parseInt(time/60)}:${time}`);
     let adhere_ = document.getElementById("adhere").value;
     setadhere(adhere_);
-    console.log("=> ", time, adhere_);
+    // console.log("=> ", time, adhere_);
     clearInterval(func);
     func = setInterval(() => {
       setTimer(cur => {
@@ -341,17 +365,17 @@ const RightHandExtension = () => {
   return (
     <div>
       <div className="mt-5">
-        <div className="row">
-          <div className="col-md-6">
+        <div class="row">
+          <div class="col-md-6">
             <div className="App">
               <h2>{timer}</h2>
-              <div className="form-group">
-                <label htmlFor="adhere">Adherence</label>
-                <input type="number" className="form-control" id="adhere" aria-describedby="emailHelp" placeholder="Adherence" />
+              <div class="form-group">
+                <label for="adhere">Adherence</label>
+                <input type="number" class="form-control" id="adhere" aria-describedby="emailHelp" placeholder="Adherence" />
               </div>
-              <div className="form-group">
-                <label htmlFor="time">Time in seconds</label>
-                <input type="number" className="form-control" id="time" aria-describedby="emailHelp" placeholder="Time in seconds" />
+              <div class="form-group">
+                <label for="time">Time in seconds</label>
+                <input type="number" class="form-control" id="time" aria-describedby="emailHelp" placeholder="Time in seconds" />
               </div>
 
               <button className="btn btn-success" onClick={onClickReset}>
@@ -359,9 +383,9 @@ const RightHandExtension = () => {
               </button>
               <h1>{count}</h1>
             </div>
-            <div className="text-danger font-weight-bold display-6"><p>{message}</p></div>
+            <div class="text-danger font-weight-bold display-6"><p>{message}</p></div>
           </div>
-          <div className="col-md-6">
+          <div class="col-md-6">
             <div>
               <Doughnut data={data} options={options} />
             </div>
