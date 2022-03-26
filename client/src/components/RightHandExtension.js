@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Pose, POSE_CONNECTIONS } from "@mediapipe/pose";
-import { Button, Modal } from "react-bootstrap";
+import { Button, Modal, Row, Col } from "react-bootstrap";
 import * as cam from "@mediapipe/camera_utils";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { Doughnut } from "react-chartjs-2";
@@ -39,6 +39,8 @@ const RightHandExtension = () => {
   const [show, setShow] = useState(false);
   const [count, setcount] = useState(0);
   const [adhere, setadhere] = useState(0);
+
+  const switchCamFunction = useRef(null);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -296,60 +298,61 @@ const RightHandExtension = () => {
   };
   return (
     <div>
-      <div className="mt-5">
-        <div class="row">
-          <div class="col-md-6">
-            <div className="App">
-              <h2>{timer}</h2>
-              <div class="form-group">
-                <label for="adhere">Adherence</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="adhere"
-                  aria-describedby="emailHelp"
-                  placeholder="Adherence"
-                />
-              </div>
-              <div class="form-group">
-                <label for="time">Time in seconds</label>
-                <input
-                  type="number"
-                  class="form-control"
-                  id="time"
-                  aria-describedby="emailHelp"
-                  placeholder="Time in seconds"
-                />
-              </div>
-
+      <ModalComp />
+      <div>
+        <Row>
+          <Col md={6}>
+            <div className="text-center">
+              <Button variant="primary" onClick={handleShow} className="m-1">
+                Show Example
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => switchCamFunction.current()}
+                className="m-1"
+              >
+                Switch Camera
+              </Button>
+              <CanvasWebCam
+                webcamRef={webcamRef}
+                canvasRef={canvasRef}
+                switchCamFunction={switchCamFunction}
+              />
+            </div>
+          </Col>
+          <Col md={6}>
+            <h2>{timer}</h2>
+            <div className="form-group d-flex justify-content-between">
+              <input
+                type="number"
+                className="form-control m-1"
+                id="adhere"
+                aria-describedby="emailHelp"
+                placeholder="Adherence"
+              />
+              <input
+                type="number"
+                className="form-control m-1"
+                id="time"
+                aria-describedby="emailHelp"
+                placeholder="Time in seconds"
+              />
               <button className="btn btn-success" onClick={onClickReset}>
-                Reset
+                Start
               </button>
+            </div>
+            <div className="d-flex justify-content-between">
               <h1>{count}</h1>
+              <div className="text-danger font-weight-bold display-6">
+                <p>{message}</p>
+              </div>
             </div>
-            <div class="text-danger font-weight-bold display-6">
-              <p>{message}</p>
-            </div>
-          </div>
-          <div class="col-md-6">
             <div>
               <Doughnut data={data} options={options} />
             </div>
-          </div>
-        </div>
-        <div className="align-items-center justify-content-center">
-          <Button variant="primary" onClick={handleShow}>
-            Show Example
-          </Button>
-          <ModalComp />
-          <CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
-        </div>
+          </Col>
+        </Row>
       </div>
-
-      <br></br>
-      <br></br>
-      <br></br>
-      <p>{count}</p>
     </div>
   );
 };

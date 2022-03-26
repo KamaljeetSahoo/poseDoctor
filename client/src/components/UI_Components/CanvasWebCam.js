@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Webcam from "react-webcam";
 
 const FACING_MODE_USER = "user";
@@ -8,9 +8,9 @@ const videoConstraints = {
   facingMode: FACING_MODE_USER,
 };
 
-const CanvasWebCam = ({ webcamRef, canvasRef }) => {
+const CanvasWebCam = ({ webcamRef, canvasRef, switchCamFunction }) => {
   const [facingMode, setFacingMode] = useState(FACING_MODE_USER);
-  const handleClick = useCallback(() => {
+  const switchCam = useCallback(() => {
     setFacingMode((prevState) =>
       prevState === FACING_MODE_USER
         ? FACING_MODE_ENVIRONMENT
@@ -18,11 +18,11 @@ const CanvasWebCam = ({ webcamRef, canvasRef }) => {
     );
   }, []);
 
+  useEffect(()=>{
+    switchCamFunction.current = switchCam
+  }, [])
+
   return (
-    <div>
-      <button className="btn btn-primary mb-3 mt-5" onClick={handleClick}>
-        Switch camera
-      </button>
       <div className="card">
         <Webcam
           ref={webcamRef}
@@ -31,31 +31,30 @@ const CanvasWebCam = ({ webcamRef, canvasRef }) => {
             facingMode,
           }}
           style={{
-            position: "absolute",
+            position: "relative",
             left: 0,
             right: 0,
             textAlign: "center",
-            zindex: 9,
-            width: 400,
-            height: 400,
+            width: "100%",
+            height: "100%",
             marginBottom: "0px",
+            display:"none"
           }}
         />
         <canvas
           ref={canvasRef}
           style={{
-            position: "absolute",
+            position: "relative",
             left: 0,
             right: 0,
             textAlign: "center",
             zindex: 9,
-            width: 400,
-            height: 400,
+            width: "100%",
+            height: "100%",
             marginBottom: "0px",
           }}
         ></canvas>
       </div>
-    </div>
   );
 };
 
