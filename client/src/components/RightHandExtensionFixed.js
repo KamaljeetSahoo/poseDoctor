@@ -280,7 +280,7 @@ const RightHandExtensionFixed = () => {
   return (
     <div>
       <ModalComp />
-      <div className="mt-5">
+      <div>
         <Row>
           <Col md={6}>
             <div className="text-center">
