@@ -17,6 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //Available routes
 app.use("/api/auth", require("./routes/auth"));
+app.use("/api/handExtension", require("./routes/handExtension"));
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

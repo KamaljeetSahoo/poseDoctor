@@ -8,6 +8,8 @@ import { joints } from "./Joints";
 import CanvasWebCam from "./UI_Components/CanvasWebCam";
 import squatImg from "./images/squats.gif";
 import { calculateAngles, degrees_to_radians } from "./utils";
+import { useNavigate } from "react-router-dom";
+
 
 const options = {
   responsive: true,
@@ -34,8 +36,19 @@ var cnt = 0;
 var message = "start excercise";
 var func = null;
 var guide = 0;
+var totalTime = null;
 
 const RightHandExtension = () => {
+
+  //check for authentication and redirect
+  let navigate = useNavigate();
+  useEffect(() => {
+    console.log("check authentication")
+    if(!localStorage.getItem("token")){
+      navigate("/login")
+    }
+  }, [])
+
   const [show, setShow] = useState(false);
   const [count, setcount] = useState(0);
   const [adhere, setadhere] = useState(0);
@@ -152,7 +165,7 @@ const RightHandExtension = () => {
         color = "#FFFFFF";
       }
 
-      console.log("guide: ", guide, " point: ", point_angle, " color: ", color);
+      // console.log("guide: ", guide, " point: ", point_angle, " color: ", color);
       const point = ghoom_jao(Pts[1], Pts[0], point_angle);
       point[1] *= -1;
 
@@ -232,7 +245,7 @@ const RightHandExtension = () => {
 
   useEffect(() => {
     // clearTimer(getDeadTime());
-
+    console.log("model loading")
     const pose = new Pose({
       locateFile: (file) => {
         return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
@@ -267,6 +280,7 @@ const RightHandExtension = () => {
     setcount(0);
     cnt = 0;
     let time = document.getElementById("time").value;
+    totalTime = time
     setTimer(`${parseInt(time / 3600)}:${parseInt(time / 60)}:${time}`);
     let adhere_ = document.getElementById("adhere").value;
     setadhere(adhere_);
@@ -284,6 +298,34 @@ const RightHandExtension = () => {
       });
     }, 1000);
   };
+
+  const addHandExtension = async(count, adherance, time) => {
+    try{
+      const response = await fetch(`http://localhost:5001/api/handExtension/addHandExtension`, {
+        method: 'POST',
+        headers: {
+          "auth-token": localStorage.getItem("token"),
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          count: count,
+          adherance: adherance,
+          time: time
+        })
+      })
+      const resp = await response.json()
+      console.log(resp)
+    }
+    catch(error){
+      console.log(error)
+    }
+  }
+
+  if (timer === "0:0:1")
+  {
+    console.log("exercise over", count, cnt, adhere, totalTime)
+    addHandExtension(count, adhere, totalTime)
+  }
 
   const ModalComp = () => {
     return (

@@ -14,6 +14,14 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
+  handExtensions: [
+    {
+      date: String,
+      count: Number,
+      adherance: Number,
+      totalTime: Number
+    }
+  ]
 });
 const User = new mongoose.model("user", UserSchema);
 User.createIndexes();
