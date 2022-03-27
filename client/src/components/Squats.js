@@ -5,10 +5,13 @@ import { Pose, POSE_CONNECTIONS } from '@mediapipe/pose'
 import * as cam from '@mediapipe/camera_utils'
 import { drawConnectors, drawLandmarks } from '@mediapipe/drawing_utils'
 import CanvasWebCam from './UI_Components/CanvasWebCam'
-import { calculateAngles } from './utils'
+import { calculateAngles, degrees_to_radians } from "./utils";
 import squatImg from './images/squats.gif'
 
 //right_squat
+var cnt=0;
+var guide=0;
+
 const Squats = () => {
 	const webcamRef = useRef(0)
 	const canvasRef = useRef(0)
@@ -17,14 +20,20 @@ const Squats = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  const switchCamFunction = useRef(null);
   
 	var count = 0;
 	var mode = null;
   
 	var camera = null
-  
-  
+	
+	const ghoom_jao = (o, p, ang) => {
+		let cos_theta = Math.cos(degrees_to_radians(ang)),
+		  sin_theta = Math.sin(degrees_to_radians(ang));
+		let x = cos_theta * (p[0] - o[0]) - sin_theta * (p[1] - o[1]) + o[0];
+		let y = sin_theta * (p[0] - o[0]) + cos_theta * (p[1] - o[1]) + o[1];
+		return [x, y];
+	  };
   
 	function poseEstimation(results) {
 	  const canvasElement = canvasRef.current;
@@ -42,7 +51,12 @@ const Squats = () => {
   
 	  if (results.poseLandmarks) {
   
-		var first_joint = {
+	//   var first_joint=null;
+	//   var mid_joint=null;
+	//   var end_joint=null;
+
+	 //swap first and last
+		var end_joint = {
 		  name: "right_hip",
 		  coord: [results.poseLandmarks[joints.right_hip].x, results.poseLandmarks[joints.right_hip].y]
 		};
@@ -50,33 +64,118 @@ const Squats = () => {
 		  name: "right_knee",
 		  coord: [results.poseLandmarks[joints.right_knee].x, results.poseLandmarks[joints.right_knee].y]
 		};
-		var end_joint = {
+		var first_joint = {
 		  name: "right_ankle",
 		  coord: [results.poseLandmarks[joints.right_ankle].x, results.poseLandmarks[joints.right_ankle].y]
-		};
-  
+		};	
 		var angle = calculateAngles(first_joint.coord, mid_joint.coord, end_joint.coord);
   
-		canvasCtx.fillText(angle, mid_joint.coord[0] * width, mid_joint.coord[1] * height);
+		// canvasCtx.fillText(angle, mid_joint.coord[0] * width, mid_joint.coord[1] * height);
+
+		var Pt1 = [first_joint.coord[0] * width, first_joint.coord[1] * height];
+		var Pt2 = [mid_joint.coord[0] * width, mid_joint.coord[1] * height];
+		var Pt3 = [end_joint.coord[0] * width, end_joint.coord[1] * height];
+		var Pts = [Pt1, Pt2, Pt3];
   
-  
+		for (let i = 0; i < 3; i += 1) {
+		  Pts[i][1] *= -1;
+		}
 		var high = 150;
-		var low = 90;
+		var low = 80;
+		
+		var color = "#FFFFFF";
+
+		var point_angle = low;
+
+		if (angle <= low && !guide) {
+		  guide = 1;
+		  color = "#18F22E";
+		  point_angle = low;
+		} else if (!guide && angle > low) {
+		  color = "#FFFFFF";
+		  point_angle = low;
+		} else if (guide === 1 && angle <= low) {
+		  color = "#18F22E";
+		} else if (guide === 1 && angle > low && angle < high) {
+		  guide = 1;
+		  point_angle = high;
+		  color = "#FFFFFF";
+		} else if (guide === 1 && angle >= high) {
+		  guide = 2;
+		  color = "#18F22E";
+		  point_angle = high;
+		} else if (guide === 2 && angle >= high) {
+		  guide = 2;
+		  color = "#18F22E";
+		  point_angle = high;
+		} else if (guide === 2 && angle < high) {
+		  guide = 0;
+		  point_angle = low;
+		  color = "#FFFFFF";
+		}
   
+		console.log("guide: ", guide, " point: ", point_angle, " color: ", color);
+
+		const point = ghoom_jao(Pts[1], Pts[0], 360-point_angle);
+
+		point[1] *= -1;
+  
+		// back to original
+		for (let i = 0; i < 3; i += 1) {
+		  Pts[i][1] *= -1;
+		}
+  
+		canvasCtx.beginPath();
+		canvasCtx.moveTo(Pts[1][0], Pts[1][1]);
+		canvasCtx.lineTo(point[0], point[1]);
+		canvasCtx.lineWidth = 7;
+		canvasCtx.strokeStyle = "#FF0000";
+		canvasCtx.stroke();
+
+		canvasCtx.beginPath();
+		canvasCtx.moveTo(Pts[1][0], Pts[1][1]);
+		canvasCtx.lineTo(Pt3[0],Pt3[1]);
+		canvasCtx.lineWidth = 7;
+		canvasCtx.strokeStyle = "#FF0000";
+		canvasCtx.stroke();		
+  
+		canvasCtx.fillText("point", point[0] * width, point[1] * height);
+		
+
+		canvasCtx.fillText(
+		  mid_joint.name + " " + angle,
+		  mid_joint.coord[0] * width,
+		  mid_joint.coord[1] * height
+		);
+
 		if (angle > high) {
-		  mode = false;
-		}
-		if (angle < low && mode == false) {
-		  count += 1;
-		  mode = true;
-		  console.log(count);
-		}
-		canvasCtx.fillText(count, 35, 60);
-  
+			mode = false;
+		  }
+		  if (angle < low && mode == false) {
+			count += 1;
+			cnt=count;
+			mode = true;
+			console.log(count);
+		  }
+		  canvasCtx.fillText(count, 35, 60);
+
+
+		drawConnectors(canvasCtx,
+			results.poseLandmarks, POSE_CONNECTIONS,
+			{ color: color, lineWidth: 2 });
+		  // The dots are the landmarks 
+		drawLandmarks(canvasCtx, results.poseLandmarks,
+			{ color: color, lineWidth: 2, radius: 2 });
+		drawLandmarks(canvasCtx, results.poseWorldLandmarks,
+			{ color: color, lineWidth: 2, radius: 2 });
+
+		
 	  }
 	  else
 		console.log("no detections");
-  
+
+
+		
   
 	}
   
@@ -95,14 +194,6 @@ const Squats = () => {
 		canvasElement.width,
 		canvasElement.height
 	  )
-	  drawConnectors(canvasCtx,
-		results.poseLandmarks, POSE_CONNECTIONS,
-		{ color: '#FFFFFF', lineWidth: 2 });
-	  // The dots are the landmarks 
-	  drawLandmarks(canvasCtx, results.poseLandmarks,
-		{ color: '#FFFFFF', lineWidth: 2, radius: 2 });
-	  drawLandmarks(canvasCtx, results.poseWorldLandmarks,
-		{ color: '#FFFFFF', lineWidth: 2, radius: 2 });
   
 	  poseEstimation(results)
 	  canvasCtx.restore();
@@ -155,7 +246,7 @@ const Squats = () => {
 										Show Example
 									</Button>
 									<ModalComp/>
-									<CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
+									<CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} switchCamFunction={switchCamFunction}/>
                 </div>
             </Col>
             <Col md={6} style={{position:'relative'}}></Col>
