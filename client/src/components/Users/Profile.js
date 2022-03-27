@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from 'react-bootstrap'
+import HandExtChart from './HandExtChart'
 
 const Profile = () => {
   let navigate = useNavigate();
@@ -36,7 +37,10 @@ const Profile = () => {
             </div>
         ):
         (
-            <div><h2>{user.name}</h2></div>
+            <div>
+              <h2>{user.name}</h2>
+              <HandExtChart data={user.handExtensions}/>
+            </div>
         )}
     </div>
   );

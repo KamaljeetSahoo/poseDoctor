@@ -315,6 +315,9 @@ const RightHandExtension = () => {
       })
       const resp = await response.json()
       console.log(resp)
+      if(resp){
+        navigate("/profile")
+      }
     }
     catch(error){
       console.log(error)
