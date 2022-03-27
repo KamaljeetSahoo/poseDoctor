@@ -37,6 +37,7 @@ var message = "start excercise";
 var func = null;
 var guide = 0;
 var totalTime = null;
+var totalAdhere = 0;
 
 const RightHandExtension = () => {
 
@@ -211,14 +212,14 @@ const RightHandExtension = () => {
       }
 
       canvasCtx.fillText(cnt, 35, 60);
-
-      if (count < adhere / 2) {
+      console.log(cnt, totalAdhere)
+      if (cnt < totalAdhere / 2) {
         message = "keep going";
-      } else if (count === adhere / 2) {
+      } else if (cnt === totalAdhere / 2) {
         message = "Doing well!";
-      } else if (count === adhere) {
+      } else if (cnt === totalAdhere) {
         message = "EXCELLENT!";
-      } else if (count < adhere) {
+      } else if (cnt < totalAdhere) {
         message = "Very good!";
       }
     } else console.log("no detections");
@@ -284,6 +285,7 @@ const RightHandExtension = () => {
     setTimer(`${parseInt(time / 3600)}:${parseInt(time / 60)}:${time}`);
     let adhere_ = document.getElementById("adhere").value;
     setadhere(adhere_);
+    totalAdhere = adhere_
     // console.log("=> ", time, adhere_);
     clearInterval(func);
     func = setInterval(() => {
@@ -388,7 +390,7 @@ const RightHandExtension = () => {
             </div>
             <div className="d-flex justify-content-between">
               <h1>{count}</h1>
-              <div className="text-danger font-weight-bold display-6">
+              <div className="text-info font-weight-bold display-6">
                 <p>{message}</p>
               </div>
             </div>
