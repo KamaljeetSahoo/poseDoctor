@@ -40,7 +40,6 @@ var totalTime = null;
 var totalAdhere = 0;
 
 const RightHandExtension = () => {
-
   //check for authentication and redirect
   let navigate = useNavigate();
   useEffect(() => {
@@ -58,6 +57,13 @@ const RightHandExtension = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const webcamRef = useRef(0);
+  const canvasRef = useRef(0);
+
+  // The state for our timer
+  const [timer, setTimer] = useState("00:00:00");
+
   const data = {
     labels: ["Adherence", "rem"],
     datasets: [
@@ -70,12 +76,6 @@ const RightHandExtension = () => {
       },
     ],
   };
-
-  const webcamRef = useRef(0);
-  const canvasRef = useRef(0);
-
-  // The state for our timer
-  const [timer, setTimer] = useState("00:00:00");
 
   const ghoom_jao = (o, p, ang) => {
     let cos_theta = Math.cos(degrees_to_radians(ang)),
@@ -139,6 +139,7 @@ const RightHandExtension = () => {
       var low = 60;
       var point_angle = low;
       var color = "#FFFFFF";
+      
       if (angle <= low && !guide) {
         guide = 1;
         color = "#18F22E";
@@ -182,6 +183,13 @@ const RightHandExtension = () => {
       canvasCtx.strokeStyle = "#FF0000";
       canvasCtx.stroke();
 
+      canvasCtx.beginPath();
+      canvasCtx.moveTo(Pts[1][0], Pts[1][1]);
+      canvasCtx.lineTo(Pt3[0], Pt3[1]);
+      canvasCtx.lineWidth = 7;
+      canvasCtx.strokeStyle = "#FF0000";
+      canvasCtx.stroke();      
+
       canvasCtx.fillText("point", point[0] * width, point[1] * height);
       canvasCtx.fillText(
         mid_joint.name + " " + angle,
@@ -212,7 +220,6 @@ const RightHandExtension = () => {
       }
 
       canvasCtx.fillText(cnt, 35, 60);
-      console.log(cnt, totalAdhere)
       if (cnt < totalAdhere / 2) {
         message = "keep going";
       } else if (cnt === totalAdhere / 2) {

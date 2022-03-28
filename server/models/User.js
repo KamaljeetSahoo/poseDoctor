@@ -21,6 +21,14 @@ const UserSchema = new Schema({
       adherance: Number,
       totalTime: Number
     }
+  ],
+  squats: [
+    {
+      date: String,
+      count: Number,
+      adherance: Number,
+      totalTime: Number
+    }
   ]
 });
 const User = new mongoose.model("user", UserSchema);
