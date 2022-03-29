@@ -41,6 +41,7 @@ const NavbarComp = () => {
             >
               PoseDoc
             </NavbarBrand>
+            <NavLink href="/profile" style={{marginRight:'10px'}}>Profile &nbsp;<i class="fa-solid fa-user"></i></NavLink>
             <NavbarToggler onClick={toggleNavbar} className="mr-2" />
             <Collapse isOpen={!collapsed} navbar>
               <Nav navbar>
