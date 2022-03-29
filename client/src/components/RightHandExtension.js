@@ -10,7 +10,6 @@ import squatImg from "./images/squats.gif";
 import { calculateAngles, degrees_to_radians } from "./utils";
 import { useNavigate } from "react-router-dom";
 
-
 const options = {
   responsive: true,
   maintainAspectRatio: true,
@@ -43,11 +42,11 @@ const RightHandExtension = () => {
   //check for authentication and redirect
   let navigate = useNavigate();
   useEffect(() => {
-    console.log("check authentication")
-    if(!localStorage.getItem("token")){
-      navigate("/login")
+    console.log("check authentication");
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
     }
-  }, [])
+  }, []);
 
   const [show, setShow] = useState(false);
   const [count, setcount] = useState(0);
@@ -105,6 +104,7 @@ const RightHandExtension = () => {
           results.poseLandmarks[joints.right_shoulder].x,
           results.poseLandmarks[joints.right_shoulder].y,
         ],
+        visibility: results.poseLandmarks[joints.right_shoulder].visibility,
       };
       var mid_joint = {
         name: "right_elbow",
@@ -112,6 +112,7 @@ const RightHandExtension = () => {
           results.poseLandmarks[joints.right_elbow].x,
           results.poseLandmarks[joints.right_elbow].y,
         ],
+        visibility: results.poseLandmarks[joints.right_elbow].visibility,
       };
       var end_joint = {
         name: "right_wrist",
@@ -119,6 +120,7 @@ const RightHandExtension = () => {
           results.poseLandmarks[joints.right_wrist].x,
           results.poseLandmarks[joints.right_wrist].y,
         ],
+        visibility: results.poseLandmarks[joints.right_wrist].visibility,
       };
 
       var angle = calculateAngles(
@@ -139,7 +141,7 @@ const RightHandExtension = () => {
       var low = 60;
       var point_angle = low;
       var color = "#FFFFFF";
-      
+
       if (angle <= low && !guide) {
         guide = 1;
         color = "#18F22E";
@@ -188,7 +190,7 @@ const RightHandExtension = () => {
       canvasCtx.lineTo(Pt3[0], Pt3[1]);
       canvasCtx.lineWidth = 7;
       canvasCtx.strokeStyle = "#FF0000";
-      canvasCtx.stroke();      
+      canvasCtx.stroke();
 
       canvasCtx.fillText("point", point[0] * width, point[1] * height);
       canvasCtx.fillText(
@@ -197,26 +199,51 @@ const RightHandExtension = () => {
         mid_joint.coord[1] * height
       );
 
-      drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
-        color: color,
-        lineWidth: 2,
-      });
-      // The dots are the landmarks
-      drawLandmarks(canvasCtx, results.poseLandmarks, {
-        color: color,
-        lineWidth: 2,
-        radius: 2,
-      });
+      if (
+        first_joint.visibility > 0.8 &&
+        mid_joint.visibility > 0.8 &&
+        end_joint.visibility > 0.8
+      ) {
+        if (angle > high) {
+          mode = false;
+        }
+        if (angle < low && mode === false) {
+          setcount((prev) => {
+            cnt = prev + 1;
+            return prev + 1;
+          });
+          mode = true;
+        }
 
-      if (angle > high) {
-        mode = false;
-      }
-      if (angle < low && mode === false) {
-        setcount((prev) => {
-          cnt = prev + 1;
-          return prev + 1;
+        drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+          color: color,
+          lineWidth: 2,
         });
-        mode = true;
+        // The dots are the landmarks
+        drawLandmarks(canvasCtx, results.poseLandmarks, {
+          color: color,
+          lineWidth: 2,
+          radius: 2,
+        });
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(0, 0);
+        canvasCtx.lineTo(canvasElement.width, 0);
+        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
+        canvasCtx.lineTo(0, canvasElement.height);
+        canvasCtx.lineTo(0, 0);
+        canvasCtx.lineWidth = 15;
+        canvasCtx.strokeStyle = "#80e885";
+        canvasCtx.stroke();
+      } else {
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(0, 0);
+        canvasCtx.lineTo(canvasElement.width, 0);
+        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
+        canvasCtx.lineTo(0, canvasElement.height);
+        canvasCtx.lineTo(0, 0);
+        canvasCtx.lineWidth = 15;
+        canvasCtx.strokeStyle = "#ed4c4c";
+        canvasCtx.stroke();
       }
 
       canvasCtx.fillText(cnt, 35, 60);
@@ -253,7 +280,7 @@ const RightHandExtension = () => {
 
   useEffect(() => {
     // clearTimer(getDeadTime());
-    console.log("model loading")
+    console.log("model loading");
     const pose = new Pose({
       locateFile: (file) => {
         return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
@@ -288,11 +315,11 @@ const RightHandExtension = () => {
     setcount(0);
     cnt = 0;
     let time = document.getElementById("time").value;
-    totalTime = time
+    totalTime = time;
     setTimer(`${parseInt(time / 3600)}:${parseInt(time / 60)}:${time}`);
     let adhere_ = document.getElementById("adhere").value;
     setadhere(adhere_);
-    totalAdhere = adhere_
+    totalAdhere = adhere_;
     // console.log("=> ", time, adhere_);
     clearInterval(func);
     func = setInterval(() => {
@@ -308,35 +335,36 @@ const RightHandExtension = () => {
     }, 1000);
   };
 
-  const addHandExtension = async(count, adherance, time) => {
-    try{
-      const response = await fetch(`http://localhost:5001/api/handExtension/addHandExtension`, {
-        method: 'POST',
-        headers: {
-          "auth-token": localStorage.getItem("token"),
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          count: count,
-          adherance: adherance,
-          time: time
-        })
-      })
-      const resp = await response.json()
-      console.log(resp)
-      if(resp){
-        navigate("/profile")
+  const addHandExtension = async (count, adherance, time) => {
+    try {
+      const response = await fetch(
+        `http://localhost:5001/api/handExtension/addHandExtension`,
+        {
+          method: "POST",
+          headers: {
+            "auth-token": localStorage.getItem("token"),
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            count: count,
+            adherance: adherance,
+            time: time,
+          }),
+        }
+      );
+      const resp = await response.json();
+      console.log(resp);
+      if (resp) {
+        navigate("/profile");
       }
+    } catch (error) {
+      console.log(error);
     }
-    catch(error){
-      console.log(error)
-    }
-  }
+  };
 
-  if (timer === "0:0:1")
-  {
-    console.log("exercise over", count, cnt, adhere, totalTime)
-    addHandExtension(count, adhere, totalTime)
+  if (timer === "0:0:1") {
+    console.log("exercise over", count, cnt, adhere, totalTime);
+    addHandExtension(count, adhere, totalTime);
   }
 
   const ModalComp = () => {

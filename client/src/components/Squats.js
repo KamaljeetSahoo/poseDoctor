@@ -10,7 +10,6 @@ import squatImg from "./images/squats.gif";
 import { useNavigate } from "react-router-dom";
 import { Doughnut } from "react-chartjs-2";
 
-
 const options = {
   responsive: true,
   maintainAspectRatio: true,
@@ -204,8 +203,11 @@ const Squats = () => {
         mid_joint.coord[1] * height
       );
 
-      
-      if(first_joint.visibility > 0.8 && mid_joint.visibility > 0.8 && end_joint.visibility > 0.8){
+      if (
+        first_joint.visibility > 0.8 &&
+        mid_joint.visibility > 0.8 &&
+        end_joint.visibility > 0.8
+      ) {
         if (angle > high) {
           mode = false;
         }
@@ -236,8 +238,7 @@ const Squats = () => {
         canvasCtx.lineWidth = 15;
         canvasCtx.strokeStyle = "#80e885";
         canvasCtx.stroke();
-      }
-      else{
+      } else {
         canvasCtx.beginPath();
         canvasCtx.moveTo(0, 0);
         canvasCtx.lineTo(canvasElement.width, 0);
@@ -248,7 +249,7 @@ const Squats = () => {
         canvasCtx.strokeStyle = "#ed4c4c";
         canvasCtx.stroke();
       }
-      
+
       canvasCtx.fillText(count, 35, 60);
 
       if (cnt < totalAdhere / 2) {
@@ -338,27 +339,25 @@ const Squats = () => {
   };
 
   const addSquats = async (count, adhere, totalTime) => {
-    const response = await fetch(`http://localhost:5001/api/squats/addSquats`,{
-      method: 'POST',
+    const response = await fetch(`http://localhost:5001/api/squats/addSquats`, {
+      method: "POST",
       headers: {
         "auth-token": localStorage.getItem("token"),
-          "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({
         count: count,
         adherance: adhere,
-        time: totalTime
-      })
-    })
-    const resp = await response.json()
-    console.log(resp)
-  }
+        time: totalTime,
+      }),
+    });
+    const resp = await response.json();
+    console.log(resp);
+  };
 
-
-  if (timer === "0:0:1")
-  {
-    console.log("exercise over", count, cnt, adhere, totalTime)
-    addSquats(count, adhere, totalTime)
+  if (timer === "0:0:1") {
+    console.log("exercise over", count, cnt, adhere, totalTime);
+    addSquats(count, adhere, totalTime);
   }
 
   const ModalComp = () => {
