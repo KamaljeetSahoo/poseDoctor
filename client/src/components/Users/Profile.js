@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Spinner } from 'react-bootstrap'
 import HandExtChart from './HandExtChart'
+import SquatChart from "./SquatChart";
 
 const Profile = () => {
   let navigate = useNavigate();
@@ -40,6 +41,7 @@ const Profile = () => {
             <div>
               <h2>{user.name}</h2>
               <HandExtChart data={user.handExtensions}/>
+              <SquatChart data={user.squats}/>
             </div>
         )}
     </div>
