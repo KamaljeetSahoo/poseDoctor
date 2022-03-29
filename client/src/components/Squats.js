@@ -106,6 +106,7 @@ const Squats = () => {
           results.poseLandmarks[joints.right_hip].x,
           results.poseLandmarks[joints.right_hip].y,
         ],
+        visibility: results.poseLandmarks[joints.right_hip].visibility,
       };
       var mid_joint = {
         name: "right_knee",
@@ -113,6 +114,7 @@ const Squats = () => {
           results.poseLandmarks[joints.right_knee].x,
           results.poseLandmarks[joints.right_knee].y,
         ],
+        visibility: results.poseLandmarks[joints.right_knee].visibility,
       };
       var first_joint = {
         name: "right_ankle",
@@ -120,6 +122,7 @@ const Squats = () => {
           results.poseLandmarks[joints.right_ankle].x,
           results.poseLandmarks[joints.right_ankle].y,
         ],
+        visibility: results.poseLandmarks[joints.right_ankle].visibility,
       };
       var angle = calculateAngles(
         first_joint.coord,
@@ -201,27 +204,51 @@ const Squats = () => {
         mid_joint.coord[1] * height
       );
 
-      drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
-        color: color,
-        lineWidth: 2,
-      });
-      // The dots are the landmarks
-      drawLandmarks(canvasCtx, results.poseLandmarks, {
-        color: color,
-        lineWidth: 2,
-        radius: 2,
-      });
+      
+      if(first_joint.visibility > 0.8 && mid_joint.visibility > 0.8 && end_joint.visibility > 0.8){
+        if (angle > high) {
+          mode = false;
+        }
+        if (angle < low && mode == false) {
+          setcount((prev) => {
+            cnt = prev + 1;
+            return prev + 1;
+          });
+          mode = true;
+        }
 
-      if (angle > high) {
-        mode = false;
-      }
-      if (angle < low && mode == false) {
-        setcount((prev) => {
-          cnt = prev + 1;
-          return prev + 1;
+        drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+          color: color,
+          lineWidth: 2,
         });
-        mode = true;
+        // The dots are the landmarks
+        drawLandmarks(canvasCtx, results.poseLandmarks, {
+          color: color,
+          lineWidth: 2,
+          radius: 2,
+        });
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(0, 0);
+        canvasCtx.lineTo(canvasElement.width, 0);
+        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
+        canvasCtx.lineTo(0, canvasElement.height);
+        canvasCtx.lineTo(0, 0);
+        canvasCtx.lineWidth = 15;
+        canvasCtx.strokeStyle = "#80e885";
+        canvasCtx.stroke();
       }
+      else{
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(0, 0);
+        canvasCtx.lineTo(canvasElement.width, 0);
+        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
+        canvasCtx.lineTo(0, canvasElement.height);
+        canvasCtx.lineTo(0, 0);
+        canvasCtx.lineWidth = 15;
+        canvasCtx.strokeStyle = "#ed4c4c";
+        canvasCtx.stroke();
+      }
+      
       canvasCtx.fillText(count, 35, 60);
 
       if (cnt < totalAdhere / 2) {
@@ -311,7 +338,6 @@ const Squats = () => {
   };
 
   const addSquats = async (count, adhere, totalTime) => {
-    console.log("Asila")
     const response = await fetch(`http://localhost:5001/api/squats/addSquats`,{
       method: 'POST',
       headers: {
