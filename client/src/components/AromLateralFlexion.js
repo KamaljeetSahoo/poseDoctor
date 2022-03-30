@@ -17,7 +17,7 @@ const AromLateralFlexion = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
+  const switchCamFunction = React.useRef(null);
   var count = 0;
   var mode = null;
 
@@ -185,7 +185,7 @@ const AromLateralFlexion = () => {
               Show Example
             </Button>
             <ModalComp />
-            <CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
+            <CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} switchCamFunction={switchCamFunction}/>
           </div>
         </Col>
         <Col md={6} style={{ position: "relative" }}>

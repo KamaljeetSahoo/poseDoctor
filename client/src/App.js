@@ -50,7 +50,7 @@ function App() {
               <Route exact path='/rightHandExtension' element={<RightHandExtension/>}/>
               <Route exact path='/rightHandExtensionFixed' element={<RightHandExtensionFixed/>}/>
               <Route exact path='/timer' element={<Timer/>}/>
-              <Route exact path='/lunges' element={<Lunges/>}/>
+              <Route exact path='/lunges' element={<LungesDemo/>}/>
               <Route exact path='/arom_flexion' element={<AromFlexion/>}/>
               <Route exact path='/arom_lateral_flexion' element={<AromLateralFlexion/>}/>
               <Route exact path='/shoulderExtension' element={<ShoulderExtension/>}/>

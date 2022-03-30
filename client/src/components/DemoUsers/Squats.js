@@ -250,7 +250,7 @@ const SquatsDemo = () => {
         canvasCtx.stroke();
       }
 
-      canvasCtx.fillText(count, 35, 60);
+      canvasCtx.fillText(cnt, 35, 60);
 
       if (cnt < totalAdhere / 2) {
         message = "keep going";

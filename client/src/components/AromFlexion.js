@@ -5,7 +5,6 @@ import { joints } from "./Joints"
 import { Pose, POSE_CONNECTIONS } from "@mediapipe/pose"
 import * as cam from "@mediapipe/camera_utils"
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils"
-import * as ReactBootStrap from "react-bootstrap"
 import CanvasWebCam from "./UI_Components/CanvasWebCam"
 import { calculateAngles } from './utils'
 import squatImg from './images/arom_flex.gif'
@@ -15,11 +14,12 @@ const AromFlexion = () => {
   const webcamRef = useRef(0);
   const canvasRef = useRef(0);
   const [show, setShow] = useState(false);
+  const switchCamFunction = React.useRef(null);
+  const [ang, setAng] = useState(0);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const [vis, setVis] = useState([]);
   var count = 0;
   var mode = null;
 
@@ -47,6 +47,7 @@ const AromFlexion = () => {
           results.poseLandmarks[joints.right_shoulder].x,
           results.poseLandmarks[joints.right_shoulder].y,
         ],
+        visibility: results.poseLandmarks[joints.right_shoulder].visibility,
       };
       var mid_joint = {
         name: "right_hip",
@@ -54,6 +55,7 @@ const AromFlexion = () => {
           results.poseLandmarks[joints.right_hip].x,
           results.poseLandmarks[joints.right_hip].y,
         ],
+        visibility: results.poseLandmarks[joints.right_hip].visibility,
       };
       var end_joint = {
         name: "right_knee",
@@ -61,6 +63,7 @@ const AromFlexion = () => {
           results.poseLandmarks[joints.right_knee].x,
           results.poseLandmarks[joints.right_knee].y,
         ],
+        visibility: results.poseLandmarks[joints.right_knee].visibility,
       };
 
       var angle = calculateAngles(
@@ -76,35 +79,60 @@ const AromFlexion = () => {
         mid_joint.coord[1] * height
       );
 
-      var high = 150;
-      var low = 90;
+      if (
+        first_joint.visibility > 0.8 &&
+        mid_joint.visibility > 0.8 &&
+        end_joint.visibility > 0.8
+      ){
+        var high = 150;
+        var low = 90;
+  
+        if (angle > high) {
+          mode = false;
+        }
+        if (angle < low && mode == false) {
+          count += 1;
+          mode = true;
+          console.log(count);
+        }
+        canvasCtx.fillText(angle + "\xB0", 35, 60);
+        if(angle > ang){
+          setAng(() => {return angle})
+        }
+        drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+          color: '#FFFFFF',
+          lineWidth: 2,
+        });
+        // The dots are the landmarks
+        drawLandmarks(canvasCtx, results.poseLandmarks, {
+          color: '#FFFFFF',
+          lineWidth: 2,
+          radius: 2,
+        });
 
-      if (angle > high) {
-        mode = false;
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(0, 0);
+        canvasCtx.lineTo(canvasElement.width, 0);
+        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
+        canvasCtx.lineTo(0, canvasElement.height);
+        canvasCtx.lineTo(0, 0);
+        canvasCtx.lineWidth = 15;
+        canvasCtx.strokeStyle = "#80e885";
+        canvasCtx.stroke();
       }
-      if (angle < low && mode == false) {
-        count += 1;
-        mode = true;
-        console.log(count);
+      else{
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(0, 0);
+        canvasCtx.lineTo(canvasElement.width, 0);
+        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
+        canvasCtx.lineTo(0, canvasElement.height);
+        canvasCtx.lineTo(0, 0);
+        canvasCtx.lineWidth = 15;
+        canvasCtx.strokeStyle = "#ed4c4c";
+        canvasCtx.stroke();
       }
-      canvasCtx.fillText(angle + "\xB0", 35, 60);
     } else console.log("no detections");
 
-    const vis_array = [];
-    var joint_names = {"right_shoulder":0, "right_knee":0, "right_hip":0, "left_shoulder":0, "left_knee":0, "left_hip":0}
-    for (const j in joint_names) {
-      let d = {};
-      d["name"] = j;
-      if (results.poseLandmarks)
-      {
-        d["visibility"] = results.poseLandmarks[joints[j]].visibility;
-      }
-      else d["visibilty"] = 0;
-      if (d["visibility"] > 0.5) d["color"] = "green";
-      else d["color"] = "red";
-      vis_array.push(d);
-    }
-    setVis(vis_array);
   }
 
   function onResults(results) {
@@ -122,21 +150,6 @@ const AromFlexion = () => {
       canvasElement.width,
       canvasElement.height
     );
-    drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
-      color: "#FFFFFF",
-      lineWidth: 2,
-    });
-    // The dots are the landmarks
-    drawLandmarks(canvasCtx, results.poseLandmarks, {
-      color: "#FFFFFF",
-      lineWidth: 2,
-      radius: 2,
-    });
-    drawLandmarks(canvasCtx, results.poseWorldLandmarks, {
-      color: "#FFFFFF",
-      lineWidth: 2,
-      radius: 2,
-    });
 
     poseEstimation(results);
     canvasCtx.restore();
@@ -183,42 +196,33 @@ const AromFlexion = () => {
 	}
   return (
     <div>
-      <Row>
-        <Col md={6}>
-          <div className="align-items-center justify-content-center">
-          <Button variant="primary" onClick={handleShow}>
-										Show Example
-									</Button>
-									<ModalComp/>
-            <CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
-          </div>
-        </Col>
-      </Row>
-      <Row>Hello</Row>
-      <Row>
-        <Col md={6} style={{ marginTop:400 }}>
-            <div>
-              <ReactBootStrap.Table bordered className="text-white">
-                <thead className="text-dark">
-                  <tr>
-                    <th>Body Part</th>
-                    <th>Visibilty</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {vis.map((vi, i) => {
-                    return (
-                      <tr key={i} style={{backgroundColor: `${vi.color}`}}>
-                        <td>{vi.name}</td>
-                        <td>{vi.visibility}</td>
-                      </tr>
-                    )
-                  })}
-                </tbody>
-              </ReactBootStrap.Table>
+      <ModalComp />
+      <div>
+        <Row>
+          <Col md={6}>
+            <div className="text-center">
+              <Button variant="primary" onClick={handleShow} className="m-1">
+                Show Example
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => switchCamFunction.current()}
+                className="m-1"
+              >
+                Switch Camera
+              </Button>
+              <CanvasWebCam
+                webcamRef={webcamRef}
+                canvasRef={canvasRef}
+                switchCamFunction={switchCamFunction}
+              />
             </div>
           </Col>
-      </Row>
+          <Col md={6}>
+            <h2>{ang}</h2>
+          </Col>
+        </Row>
+      </div>
     </div>
   );
 };
