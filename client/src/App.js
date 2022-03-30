@@ -14,9 +14,14 @@ import AromFlexion from './components/AromFlexion';
 import AromLateralFlexion from './components/AromLateralFlexion';
 import ShoulderExtension from './components/ShoulderExtension';
 import CheckVisibility from "./components/CheckVisibility";
+import LeaderBoard from './components/Users/LeaderBoard'
 
 import RightHandExtensionFixed from "./components/RightHandExtensionFixed";
 
+//demo links
+import LungesDemo from './components/DemoUsers/Lunges'
+import RightHandExtensionDemo from './components/DemoUsers/RightHandExtension'
+import SquatsDemo from './components/DemoUsers/Squats'
 
 //authentication component imports
 import Login from './components/Auth/Login'
@@ -50,6 +55,10 @@ function App() {
               <Route exact path='/arom_lateral_flexion' element={<AromLateralFlexion/>}/>
               <Route exact path='/shoulderExtension' element={<ShoulderExtension/>}/>
               <Route exact path='/check_visibility' element={<CheckVisibility/>}/>
+              <Route exact path='/leaderBoard' element={<LeaderBoard/>}/>
+              <Route exact path='/rightHandExtensionDemo' element={<RightHandExtensionDemo/>}/>
+              <Route exact path='/lungesDemo' element={<LungesDemo/>}/>
+              <Route exact path='/squatsDemo' element={<SquatsDemo/>}/>
             </Routes>
           </div>
         </div>

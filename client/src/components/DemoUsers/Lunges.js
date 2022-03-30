@@ -1,80 +1,72 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import { Button, Col, Modal, Row } from "react-bootstrap";
+import { joints } from "../Joints";
 import { Pose, POSE_CONNECTIONS } from "@mediapipe/pose";
-import { Button, Modal, Row, Col } from "react-bootstrap";
 import * as cam from "@mediapipe/camera_utils";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
+import CanvasWebCam from "../UI_Components/CanvasWebCam";
+import { calculateAngles, degrees_to_radians } from "../utils";
+import squatImg from "../images/squats.gif";
 import { Doughnut } from "react-chartjs-2";
-import { joints } from "./Joints";
-import CanvasWebCam from "./UI_Components/CanvasWebCam";
-import squatImg from "./images/squats.gif";
-import { calculateAngles, degrees_to_radians } from "./utils";
-import { useNavigate } from "react-router-dom";
 
 const options = {
-  responsive: true,
-  maintainAspectRatio: true,
-  plugins: {
-    title: {
-      display: true,
-      text: "Doughnut Chart",
-      color: "blue",
-      font: {
-        size: 18,
-      },
-      responsive: true,
-      animation: {
-        animateScale: true,
-      },
-    },
-  },
-};
-
-var mode = null;
-var camera = null;
-var cnt = 0;
-var message = "start excercise";
-var func = null;
-var guide = 0;
-var totalTime = null;
-var totalAdhere = 0;
-
-const RightHandExtension = () => {
-  //check for authentication and redirect
-  let navigate = useNavigate();
-  // useEffect(() => {
-  //   console.log("check authentication");
-  //   if (!localStorage.getItem("token")) {
-  //     navigate("/login");
-  //   }
-  // }, []);
-
-  const [show, setShow] = useState(false);
-  const [count, setcount] = useState(0);
-  const [adhere, setadhere] = useState(0);
-
-  const switchCamFunction = useRef(null);
-
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const webcamRef = useRef(0);
-  const canvasRef = useRef(0);
-
-  // The state for our timer
-  const [timer, setTimer] = useState("00:00:00");
-
-  const data = {
-    labels: ["Adherence", "rem"],
-    datasets: [
-      {
-        label: "ADHERENCE",
-        data: [count, adhere - count],
-        borderColor: ["rgba(255,206,86,0.2)"],
-        backgroundColor: ["rgba(232,99,132,1)", "rgba(232,211,6,1)"],
-        pointBackgroundColor: "rgba(255,206,86,0.2)",
-      },
-    ],
+	responsive: true,
+	maintainAspectRatio: true,
+	plugins: {
+	  title: {
+		display: true,
+		text: "Doughnut Chart",
+		color: "blue",
+		font: {
+		  size: 18,
+		},
+		responsive: true,
+		animation: {
+		  animateScale: true,
+		},
+	  },
+	},
   };
+
+  var mode = null;
+  var camera = null;
+  var cnt = 0;
+  var message = "start excercise";
+  var func = null;
+  var guide = 0;
+  var totalTime = null;
+  var totalAdhere = 0;
+
+const LungesDemo = () => {
+	//check for authentication and redirect
+
+	const [show, setShow] = useState(false);
+	const [count, setcount] = useState(0);
+	const [adhere, setadhere] = useState(0);
+  
+	const switchCamFunction = useRef(null);
+  
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
+  
+	const webcamRef = useRef(0);
+	const canvasRef = useRef(0);
+
+	// The state for our timer
+	const [timer, setTimer] = useState("00:00:00");
+	
+	const data = {
+		labels: ["Adherence", "rem"],
+		datasets: [
+		  {
+			label: "ADHERENCE",
+			data: [count, adhere - count],
+			borderColor: ["rgba(255,206,86,0.2)"],
+			backgroundColor: ["rgba(232,99,132,1)", "rgba(232,211,6,1)"],
+			pointBackgroundColor: "rgba(255,206,86,0.2)",
+		  },
+		],
+	  };
 
   const ghoom_jao = (o, p, ang) => {
     let cos_theta = Math.cos(degrees_to_radians(ang)),
@@ -98,36 +90,39 @@ const RightHandExtension = () => {
     var height = canvasElement.height;
 
     if (results.poseLandmarks) {
-      var first_joint = {
-        name: "right_shoulder",
+      //   var first_joint=null;
+      //   var mid_joint=null;
+      //   var end_joint=null;
+
+      //swap first and last
+      var end_joint = {
+        name: "right_hip",
         coord: [
-          results.poseLandmarks[joints.right_shoulder].x,
-          results.poseLandmarks[joints.right_shoulder].y,
+          results.poseLandmarks[joints.right_hip].x,
+          results.poseLandmarks[joints.right_hip].y,
         ],
-        visibility: results.poseLandmarks[joints.right_shoulder].visibility,
       };
       var mid_joint = {
-        name: "right_elbow",
+        name: "right_knee",
         coord: [
-          results.poseLandmarks[joints.right_elbow].x,
-          results.poseLandmarks[joints.right_elbow].y,
+          results.poseLandmarks[joints.right_knee].x,
+          results.poseLandmarks[joints.right_knee].y,
         ],
-        visibility: results.poseLandmarks[joints.right_elbow].visibility,
       };
-      var end_joint = {
-        name: "right_wrist",
+      var first_joint = {
+        name: "right_ankle",
         coord: [
-          results.poseLandmarks[joints.right_wrist].x,
-          results.poseLandmarks[joints.right_wrist].y,
+          results.poseLandmarks[joints.right_ankle].x,
+          results.poseLandmarks[joints.right_ankle].y,
         ],
-        visibility: results.poseLandmarks[joints.right_wrist].visibility,
       };
-
       var angle = calculateAngles(
         first_joint.coord,
         mid_joint.coord,
         end_joint.coord
       );
+
+      // canvasCtx.fillText(angle, mid_joint.coord[0] * width, mid_joint.coord[1] * height);
 
       var Pt1 = [first_joint.coord[0] * width, first_joint.coord[1] * height];
       var Pt2 = [mid_joint.coord[0] * width, mid_joint.coord[1] * height];
@@ -137,10 +132,12 @@ const RightHandExtension = () => {
       for (let i = 0; i < 3; i += 1) {
         Pts[i][1] *= -1;
       }
-      var high = 135;
-      var low = 60;
-      var point_angle = low;
+      var high = 150;
+      var low = 80;
+
       var color = "#FFFFFF";
+
+      var point_angle = low;
 
       if (angle <= low && !guide) {
         guide = 1;
@@ -169,8 +166,10 @@ const RightHandExtension = () => {
         color = "#FFFFFF";
       }
 
-      // console.log("guide: ", guide, " point: ", point_angle, " color: ", color);
-      const point = ghoom_jao(Pts[1], Pts[0], point_angle);
+    //   console.log("guide: ", guide, " point: ", point_angle, " color: ", color);
+
+      const point = ghoom_jao(Pts[1], Pts[0], 360 - point_angle);
+
       point[1] *= -1;
 
       // back to original
@@ -187,67 +186,43 @@ const RightHandExtension = () => {
 
       canvasCtx.beginPath();
       canvasCtx.moveTo(Pts[1][0], Pts[1][1]);
-      canvasCtx.lineTo(Pt3[0], Pt3[1]);
+      canvasCtx.lineTo(Pt1[0], Pt1[1]);
       canvasCtx.lineWidth = 7;
       canvasCtx.strokeStyle = "#FF0000";
       canvasCtx.stroke();
 
       canvasCtx.fillText("point", point[0] * width, point[1] * height);
+
       canvasCtx.fillText(
         mid_joint.name + " " + angle,
         mid_joint.coord[0] * width,
         mid_joint.coord[1] * height
       );
 
-      if (
-        first_joint.visibility > 0.8 &&
-        mid_joint.visibility > 0.8 &&
-        end_joint.visibility > 0.8
-      ) {
-        if (angle > high) {
-          mode = false;
-        }
-        if (angle < low && mode === false) {
-          setcount((prev) => {
-            cnt = prev + 1;
-            return prev + 1;
-          });
-          mode = true;
-        }
+	  drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+        color: color,
+        lineWidth: 2,
+      });
+      // The dots are the landmarks
+      drawLandmarks(canvasCtx, results.poseLandmarks, {
+        color: color,
+        lineWidth: 2,
+        radius: 2,
+      });
 
-        drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
-          color: color,
-          lineWidth: 2,
-        });
-        // The dots are the landmarks
-        drawLandmarks(canvasCtx, results.poseLandmarks, {
-          color: color,
-          lineWidth: 2,
-          radius: 2,
-        });
-        canvasCtx.beginPath();
-        canvasCtx.moveTo(0, 0);
-        canvasCtx.lineTo(canvasElement.width, 0);
-        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
-        canvasCtx.lineTo(0, canvasElement.height);
-        canvasCtx.lineTo(0, 0);
-        canvasCtx.lineWidth = 15;
-        canvasCtx.strokeStyle = "#80e885";
-        canvasCtx.stroke();
-      } else {
-        canvasCtx.beginPath();
-        canvasCtx.moveTo(0, 0);
-        canvasCtx.lineTo(canvasElement.width, 0);
-        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
-        canvasCtx.lineTo(0, canvasElement.height);
-        canvasCtx.lineTo(0, 0);
-        canvasCtx.lineWidth = 15;
-        canvasCtx.strokeStyle = "#ed4c4c";
-        canvasCtx.stroke();
+      if (angle > high) {
+        mode = false;
       }
+      if (angle < low && mode == false) {
+        setcount((prev) => {
+			cnt = prev + 1;
+			return prev + 1;
+		  });
+		  mode = true;
+      }
+      canvasCtx.fillText(count, 35, 60);
 
-      canvasCtx.fillText(cnt, 35, 60);
-      if (cnt < totalAdhere / 2) {
+	  if (cnt < totalAdhere / 2) {
         message = "keep going";
       } else if (cnt === totalAdhere / 2) {
         message = "Doing well!";
@@ -256,6 +231,7 @@ const RightHandExtension = () => {
       } else if (cnt < totalAdhere) {
         message = "Very good!";
       }
+
     } else console.log("no detections");
   }
 
@@ -274,19 +250,17 @@ const RightHandExtension = () => {
       canvasElement.width,
       canvasElement.height
     );
+
     poseEstimation(results);
     canvasCtx.restore();
   }
 
   useEffect(() => {
-    // clearTimer(getDeadTime());
-    console.log("model loading");
     const pose = new Pose({
       locateFile: (file) => {
         return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
       },
     });
-
     pose.setOptions({
       modelComplexity: 1,
       smoothLandmarks: true,
@@ -334,38 +308,6 @@ const RightHandExtension = () => {
       });
     }, 1000);
   };
-
-  const addHandExtension = async (count, adherance, time) => {
-    try {
-      const response = await fetch(
-        `http://localhost:5001/api/handExtension/addHandExtension`,
-        {
-          method: "POST",
-          headers: {
-            "auth-token": localStorage.getItem("token"),
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            count: count,
-            adherance: adherance,
-            time: time,
-          }),
-        }
-      );
-      const resp = await response.json();
-      console.log(resp);
-      if (resp) {
-        navigate("/profile");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  // if (timer === "0:0:1") {
-  //   console.log("exercise over", count, cnt, adhere, totalTime);
-  //   addHandExtension(count, adhere, totalTime);
-  // }
 
   const ModalComp = () => {
     return (
@@ -425,7 +367,7 @@ const RightHandExtension = () => {
             </div>
             <div className="d-flex justify-content-between">
               <h1>{count}</h1>
-              <div className="text-info font-weight-bold display-6">
+              <div className="text-danger font-weight-bold display-6">
                 <p>{message}</p>
               </div>
             </div>
@@ -439,4 +381,4 @@ const RightHandExtension = () => {
   );
 };
 
-export default RightHandExtension;
+export default LungesDemo;

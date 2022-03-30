@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useEffect, useState } from "react";
+import { Button, Col, Modal, Row } from "react-bootstrap";
+import { joints } from "../Joints";
 import { Pose, POSE_CONNECTIONS } from "@mediapipe/pose";
-import { Button, Modal, Row, Col } from "react-bootstrap";
 import * as cam from "@mediapipe/camera_utils";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
-import { Doughnut } from "react-chartjs-2";
-import { joints } from "./Joints";
-import CanvasWebCam from "./UI_Components/CanvasWebCam";
-import squatImg from "./images/squats.gif";
-import { calculateAngles, degrees_to_radians } from "./utils";
+import CanvasWebCam from "../UI_Components/CanvasWebCam";
+import { calculateAngles, degrees_to_radians } from "../utils";
+import squatImg from "../images/squats.gif";
 import { useNavigate } from "react-router-dom";
+import { Doughnut } from "react-chartjs-2";
 
 const options = {
   responsive: true,
@@ -38,9 +38,9 @@ var guide = 0;
 var totalTime = null;
 var totalAdhere = 0;
 
-const RightHandExtension = () => {
+const SquatsDemo = () => {
   //check for authentication and redirect
-  let navigate = useNavigate();
+  // let navigate = useNavigate();
   // useEffect(() => {
   //   console.log("check authentication");
   //   if (!localStorage.getItem("token")) {
@@ -98,36 +98,38 @@ const RightHandExtension = () => {
     var height = canvasElement.height;
 
     if (results.poseLandmarks) {
-      var first_joint = {
-        name: "right_shoulder",
+      //swap first and last
+      var end_joint = {
+        name: "right_hip",
         coord: [
-          results.poseLandmarks[joints.right_shoulder].x,
-          results.poseLandmarks[joints.right_shoulder].y,
+          results.poseLandmarks[joints.right_hip].x,
+          results.poseLandmarks[joints.right_hip].y,
         ],
-        visibility: results.poseLandmarks[joints.right_shoulder].visibility,
+        visibility: results.poseLandmarks[joints.right_hip].visibility,
       };
       var mid_joint = {
-        name: "right_elbow",
+        name: "right_knee",
         coord: [
-          results.poseLandmarks[joints.right_elbow].x,
-          results.poseLandmarks[joints.right_elbow].y,
+          results.poseLandmarks[joints.right_knee].x,
+          results.poseLandmarks[joints.right_knee].y,
         ],
-        visibility: results.poseLandmarks[joints.right_elbow].visibility,
+        visibility: results.poseLandmarks[joints.right_knee].visibility,
       };
-      var end_joint = {
-        name: "right_wrist",
+      var first_joint = {
+        name: "right_ankle",
         coord: [
-          results.poseLandmarks[joints.right_wrist].x,
-          results.poseLandmarks[joints.right_wrist].y,
+          results.poseLandmarks[joints.right_ankle].x,
+          results.poseLandmarks[joints.right_ankle].y,
         ],
-        visibility: results.poseLandmarks[joints.right_wrist].visibility,
+        visibility: results.poseLandmarks[joints.right_ankle].visibility,
       };
-
       var angle = calculateAngles(
         first_joint.coord,
         mid_joint.coord,
         end_joint.coord
       );
+
+      // canvasCtx.fillText(angle, mid_joint.coord[0] * width, mid_joint.coord[1] * height);
 
       var Pt1 = [first_joint.coord[0] * width, first_joint.coord[1] * height];
       var Pt2 = [mid_joint.coord[0] * width, mid_joint.coord[1] * height];
@@ -137,8 +139,8 @@ const RightHandExtension = () => {
       for (let i = 0; i < 3; i += 1) {
         Pts[i][1] *= -1;
       }
-      var high = 135;
-      var low = 60;
+      var high = 150;
+      var low = 80;
       var point_angle = low;
       var color = "#FFFFFF";
 
@@ -170,7 +172,8 @@ const RightHandExtension = () => {
       }
 
       // console.log("guide: ", guide, " point: ", point_angle, " color: ", color);
-      const point = ghoom_jao(Pts[1], Pts[0], point_angle);
+
+      const point = ghoom_jao(Pts[1], Pts[0], 360 - point_angle);
       point[1] *= -1;
 
       // back to original
@@ -193,6 +196,7 @@ const RightHandExtension = () => {
       canvasCtx.stroke();
 
       canvasCtx.fillText("point", point[0] * width, point[1] * height);
+
       canvasCtx.fillText(
         mid_joint.name + " " + angle,
         mid_joint.coord[0] * width,
@@ -207,7 +211,7 @@ const RightHandExtension = () => {
         if (angle > high) {
           mode = false;
         }
-        if (angle < low && mode === false) {
+        if (angle < low && mode == false) {
           setcount((prev) => {
             cnt = prev + 1;
             return prev + 1;
@@ -246,7 +250,8 @@ const RightHandExtension = () => {
         canvasCtx.stroke();
       }
 
-      canvasCtx.fillText(cnt, 35, 60);
+      canvasCtx.fillText(count, 35, 60);
+
       if (cnt < totalAdhere / 2) {
         message = "keep going";
       } else if (cnt === totalAdhere / 2) {
@@ -274,19 +279,17 @@ const RightHandExtension = () => {
       canvasElement.width,
       canvasElement.height
     );
+
     poseEstimation(results);
     canvasCtx.restore();
   }
 
   useEffect(() => {
-    // clearTimer(getDeadTime());
-    console.log("model loading");
     const pose = new Pose({
       locateFile: (file) => {
         return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
       },
     });
-
     pose.setOptions({
       modelComplexity: 1,
       smoothLandmarks: true,
@@ -335,36 +338,26 @@ const RightHandExtension = () => {
     }, 1000);
   };
 
-  const addHandExtension = async (count, adherance, time) => {
-    try {
-      const response = await fetch(
-        `http://localhost:5001/api/handExtension/addHandExtension`,
-        {
-          method: "POST",
-          headers: {
-            "auth-token": localStorage.getItem("token"),
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            count: count,
-            adherance: adherance,
-            time: time,
-          }),
-        }
-      );
-      const resp = await response.json();
-      console.log(resp);
-      if (resp) {
-        navigate("/profile");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const addSquats = async (count, adhere, totalTime) => {
+  //   const response = await fetch(`http://localhost:5001/api/squats/addSquats`, {
+  //     method: "POST",
+  //     headers: {
+  //       "auth-token": localStorage.getItem("token"),
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       count: count,
+  //       adherance: adhere,
+  //       time: totalTime,
+  //     }),
+  //   });
+  //   const resp = await response.json();
+  //   console.log(resp);
+  // };
 
   // if (timer === "0:0:1") {
   //   console.log("exercise over", count, cnt, adhere, totalTime);
-  //   addHandExtension(count, adhere, totalTime);
+  //   addSquats(count, adhere, totalTime);
   // }
 
   const ModalComp = () => {
@@ -439,4 +432,4 @@ const RightHandExtension = () => {
   );
 };
 
-export default RightHandExtension;
+export default SquatsDemo;

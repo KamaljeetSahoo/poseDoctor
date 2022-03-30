@@ -11,70 +11,75 @@ import { useNavigate } from "react-router-dom";
 import { Doughnut } from "react-chartjs-2";
 
 const options = {
-	responsive: true,
-	maintainAspectRatio: true,
-	plugins: {
-	  title: {
-		display: true,
-		text: "Doughnut Chart",
-		color: "blue",
-		font: {
-		  size: 18,
-		},
-		responsive: true,
-		animation: {
-		  animateScale: true,
-		},
-	  },
-	},
+  responsive: true,
+  maintainAspectRatio: true,
+  plugins: {
+    title: {
+      display: true,
+      text: "Doughnut Chart",
+      color: "blue",
+      font: {
+        size: 18,
+      },
+      responsive: true,
+      animation: {
+        animateScale: true,
+      },
+    },
+  },
+};
+
+var mode = null;
+var camera = null;
+var cnt = 0;
+var message = "start excercise";
+var func = null;
+var guide = 0;
+var totalTime = null;
+var totalAdhere = 0;
+
+function getDistance (pt1, pt2){
+	console.log(pt1, pt2)
+	return 0;
+}
+
+const Lunges = () => {
+  //check for authentication and redirect
+  let navigate = useNavigate();
+  useEffect(() => {
+    console.log("check authentication");
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, []);
+
+  const [show, setShow] = useState(false);
+  const [count, setcount] = useState(0);
+  const [adhere, setadhere] = useState(0);
+
+  const switchCamFunction = useRef(null);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+
+  const webcamRef = useRef(0);
+  const canvasRef = useRef(0);
+
+  // The state for our timer
+  const [timer, setTimer] = useState("00:00:00");
+
+  const data = {
+    labels: ["Adherence", "rem"],
+    datasets: [
+      {
+        label: "ADHERENCE",
+        data: [count, adhere - count],
+        borderColor: ["rgba(255,206,86,0.2)"],
+        backgroundColor: ["rgba(232,99,132,1)", "rgba(232,211,6,1)"],
+        pointBackgroundColor: "rgba(255,206,86,0.2)",
+      },
+    ],
   };
-
-  var mode = null;
-  var camera = null;
-  var cnt = 0;
-  var message = "start excercise";
-  var func = null;
-  var guide = 0;
-  var totalTime = null;
-  var totalAdhere = 0;
-
-const Squats = () => {
-	//check for authentication and redirect
-	let navigate = useNavigate();
-	useEffect(() => {
-	  console.log("check authentication");
-	  if (!localStorage.getItem("token")) {
-		navigate("/login");
-	  }
-	}, []);
-
-	const [show, setShow] = useState(false);
-	const [count, setcount] = useState(0);
-	const [adhere, setadhere] = useState(0);
-  
-	const switchCamFunction = useRef(null);
-  
-	const handleClose = () => setShow(false);
-	const handleShow = () => setShow(true);
-  
-	const webcamRef = useRef(0);
-	const canvasRef = useRef(0);
-
-	// The state for our timer
-	const [timer, setTimer] = useState("00:00:00");
-	
-	const data = {
-		labels: ["Adherence", "rem"],
-		datasets: [
-		  {
-			label: "ADHERENCE",
-			data: [count, adhere - count],
-			borderColor: ["rgba(255,206,86,0.2)"],
-			backgroundColor: ["rgba(232,99,132,1)", "rgba(232,211,6,1)"],
-			pointBackgroundColor: "rgba(255,206,86,0.2)",
-		  },
-		],
-	  };
 
   const ghoom_jao = (o, p, ang) => {
     let cos_theta = Math.cos(degrees_to_radians(ang)),
@@ -109,6 +114,7 @@ const Squats = () => {
           results.poseLandmarks[joints.right_hip].x,
           results.poseLandmarks[joints.right_hip].y,
         ],
+        visibility: results.poseLandmarks[joints.right_hip].visibility,
       };
       var mid_joint = {
         name: "right_knee",
@@ -116,6 +122,7 @@ const Squats = () => {
           results.poseLandmarks[joints.right_knee].x,
           results.poseLandmarks[joints.right_knee].y,
         ],
+        visibility: results.poseLandmarks[joints.right_knee].visibility,
       };
       var first_joint = {
         name: "right_ankle",
@@ -123,6 +130,7 @@ const Squats = () => {
           results.poseLandmarks[joints.right_ankle].x,
           results.poseLandmarks[joints.right_ankle].y,
         ],
+        visibility: results.poseLandmarks[joints.right_ankle].visibility,
       };
       var angle = calculateAngles(
         first_joint.coord,
@@ -174,7 +182,7 @@ const Squats = () => {
         color = "#FFFFFF";
       }
 
-    //   console.log("guide: ", guide, " point: ", point_angle, " color: ", color);
+      //   console.log("guide: ", guide, " point: ", point_angle, " color: ", color);
 
       const point = ghoom_jao(Pts[1], Pts[0], 360 - point_angle);
 
@@ -207,30 +215,54 @@ const Squats = () => {
         mid_joint.coord[1] * height
       );
 
-	  drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
-        color: color,
-        lineWidth: 2,
-      });
-      // The dots are the landmarks
-      drawLandmarks(canvasCtx, results.poseLandmarks, {
-        color: color,
-        lineWidth: 2,
-        radius: 2,
-      });
-
-      if (angle > high) {
-        mode = false;
-      }
-      if (angle < low && mode == false) {
-        setcount((prev) => {
-			cnt = prev + 1;
-			return prev + 1;
-		  });
-		  mode = true;
+      if (
+        first_joint.visibility > 0.8 &&
+        mid_joint.visibility > 0.8 &&
+        end_joint.visibility > 0.8
+      ) {
+        if (angle > high && getDistance(Pt1, Pt2) > 100) {
+          mode = false;
+        }
+        if (angle < low && mode == false) {
+          setcount((prev) => {
+            cnt = prev + 1;
+            return prev + 1;
+          });
+          mode = true;
+        }
+        drawConnectors(canvasCtx, results.poseLandmarks, POSE_CONNECTIONS, {
+          color: color,
+          lineWidth: 2,
+        });
+        // The dots are the landmarks
+        drawLandmarks(canvasCtx, results.poseLandmarks, {
+          color: color,
+          lineWidth: 2,
+          radius: 2,
+        });
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(0, 0);
+        canvasCtx.lineTo(canvasElement.width, 0);
+        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
+        canvasCtx.lineTo(0, canvasElement.height);
+        canvasCtx.lineTo(0, 0);
+        canvasCtx.lineWidth = 15;
+        canvasCtx.strokeStyle = "#80e885";
+        canvasCtx.stroke();
+      } else {
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(0, 0);
+        canvasCtx.lineTo(canvasElement.width, 0);
+        canvasCtx.lineTo(canvasElement.width, canvasElement.height);
+        canvasCtx.lineTo(0, canvasElement.height);
+        canvasCtx.lineTo(0, 0);
+        canvasCtx.lineWidth = 15;
+        canvasCtx.strokeStyle = "#ed4c4c";
+        canvasCtx.stroke();
       }
       canvasCtx.fillText(count, 35, 60);
 
-	  if (cnt < totalAdhere / 2) {
+      if (cnt < totalAdhere / 2) {
         message = "keep going";
       } else if (cnt === totalAdhere / 2) {
         message = "Doing well!";
@@ -239,7 +271,6 @@ const Squats = () => {
       } else if (cnt < totalAdhere) {
         message = "Very good!";
       }
-
     } else console.log("no detections");
   }
 
@@ -389,4 +420,4 @@ const Squats = () => {
   );
 };
 
-export default Squats;
+export default Lunges;

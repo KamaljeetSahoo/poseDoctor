@@ -4,11 +4,13 @@ import { Button, Modal, Row, Col } from "react-bootstrap";
 import * as cam from "@mediapipe/camera_utils";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import { Doughnut } from "react-chartjs-2";
-import { joints } from "./Joints";
-import CanvasWebCam from "./UI_Components/CanvasWebCam";
-import squatImg from "./images/squats.gif";
-import { calculateAngles, degrees_to_radians } from "./utils";
+import { joints } from "../Joints";
+import CanvasWebCam from "../UI_Components/CanvasWebCam";
+import squatImg from "../images/squats.gif";
+import { calculateAngles, degrees_to_radians } from "../utils";
 import { useNavigate } from "react-router-dom";
+import { useSpeechSynthesis } from 'react-speech-kit';
+
 
 const options = {
   responsive: true,
@@ -38,7 +40,7 @@ var guide = 0;
 var totalTime = null;
 var totalAdhere = 0;
 
-const RightHandExtension = () => {
+const RightHandExtensionDemo = () => {
   //check for authentication and redirect
   let navigate = useNavigate();
   // useEffect(() => {
@@ -47,7 +49,15 @@ const RightHandExtension = () => {
   //     navigate("/login");
   //   }
   // }, []);
+  const { speak } = useSpeechSynthesis();
 
+  const kaha = () => {
+    return speak({ text: "not visible" })
+  }
+
+  const kahaVisibile = () => {
+    return speak({ text: "You are visible" })
+  }
   const [show, setShow] = useState(false);
   const [count, setcount] = useState(0);
   const [adhere, setadhere] = useState(0);
@@ -244,6 +254,8 @@ const RightHandExtension = () => {
         canvasCtx.lineWidth = 15;
         canvasCtx.strokeStyle = "#ed4c4c";
         canvasCtx.stroke();
+
+        // kaha()
       }
 
       canvasCtx.fillText(cnt, 35, 60);
@@ -335,32 +347,32 @@ const RightHandExtension = () => {
     }, 1000);
   };
 
-  const addHandExtension = async (count, adherance, time) => {
-    try {
-      const response = await fetch(
-        `http://localhost:5001/api/handExtension/addHandExtension`,
-        {
-          method: "POST",
-          headers: {
-            "auth-token": localStorage.getItem("token"),
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            count: count,
-            adherance: adherance,
-            time: time,
-          }),
-        }
-      );
-      const resp = await response.json();
-      console.log(resp);
-      if (resp) {
-        navigate("/profile");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const addHandExtension = async (count, adherance, time) => {
+  //   try {
+  //     const response = await fetch(
+  //       `http://localhost:5001/api/handExtension/addHandExtension`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "auth-token": localStorage.getItem("token"),
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({
+  //           count: count,
+  //           adherance: adherance,
+  //           time: time,
+  //         }),
+  //       }
+  //     );
+  //     const resp = await response.json();
+  //     console.log(resp);
+  //     if (resp) {
+  //       navigate("/profile");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   // if (timer === "0:0:1") {
   //   console.log("exercise over", count, cnt, adhere, totalTime);
@@ -439,4 +451,4 @@ const RightHandExtension = () => {
   );
 };
 
-export default RightHandExtension;
+export default RightHandExtensionDemo;

@@ -61,9 +61,24 @@ const NavbarComp = () => {
                     </button>
                   </NavItem>
                 )}
-                <NavItem>
-                  <NavLink href="/demo">Demo</NavLink>
-                </NavItem>
+                <UncontrolledDropdown nav inNavbar>
+                  <DropdownToggle nav caret>
+                    Demo(Login Not Required)
+                  </DropdownToggle>
+                  <DropdownMenu>
+                    <DropdownItem>
+                      <NavLink href="/squatsDemo">Squats</NavLink>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <NavLink href="/rightHandExtensionDemo">
+                        Right Hand Extension
+                      </NavLink>
+                    </DropdownItem>
+                    <DropdownItem>
+                      <NavLink href="/lungesDemo">Lunges</NavLink>
+                    </DropdownItem>
+                  </DropdownMenu>
+                </UncontrolledDropdown>
                 <UncontrolledDropdown nav inNavbar>
                   <DropdownToggle nav caret>
                     Exercises
