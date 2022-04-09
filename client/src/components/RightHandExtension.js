@@ -41,12 +41,12 @@ var totalAdhere = 0;
 const RightHandExtension = () => {
   //check for authentication and redirect
   let navigate = useNavigate();
-  // useEffect(() => {
-  //   console.log("check authentication");
-  //   if (!localStorage.getItem("token")) {
-  //     navigate("/login");
-  //   }
-  // }, []);
+  useEffect(() => {
+    console.log("check authentication");
+    if (!localStorage.getItem("token")) {
+      navigate("/login");
+    }
+  }, []);
 
   const [show, setShow] = useState(false);
   const [count, setcount] = useState(0);
@@ -362,10 +362,10 @@ const RightHandExtension = () => {
     }
   };
 
-  // if (timer === "0:0:1") {
-  //   console.log("exercise over", count, cnt, adhere, totalTime);
-  //   addHandExtension(count, adhere, totalTime);
-  // }
+  if (timer === "0:0:1") {
+    console.log("exercise over", count, cnt, adhere, totalTime);
+    addHandExtension(count, adhere, totalTime);
+  }
 
   const ModalComp = () => {
     return (

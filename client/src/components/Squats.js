@@ -358,6 +358,7 @@ const Squats = () => {
   if (timer === "0:0:1") {
     console.log("exercise over", count, cnt, adhere, totalTime);
     addSquats(count, adhere, totalTime);
+    navigate('/profile')
   }
 
   const ModalComp = () => {

@@ -99,4 +99,15 @@ router.get("/getUser", fetchUser, async (req, res) => {
   }
 });
 
+router.get("/getAllUsers", fetchUser, async(req, res) => {
+  try {
+    const users = await User.find()
+    console.log(users)
+    res.send(JSON.stringify(users))
+  }
+  catch(error){
+    console.log(error)
+  }
+})
+
 module.exports = router;

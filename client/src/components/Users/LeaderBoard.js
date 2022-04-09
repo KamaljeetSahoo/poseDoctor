@@ -112,7 +112,11 @@ const LeaderBoard = () => {
           {
               Header: 'Hand Extensions',
               accessor: 'handExtensions'
-          }
+          },
+          {
+            Header: 'Lunges',
+            accessor: 'lunges'
+        }
         ],
         []
       )
@@ -137,9 +141,27 @@ const LeaderBoard = () => {
     const data = [
         {
             name: 'Kamaljeet',
+            squats: 18,
+            handExtensions: 12,
+            lunges: 30
+        },
+        {
+            name: 'Adyasha',
             squats: 10,
             handExtensions: 20
-        }
+        },
+        {
+            name: 'Saily',
+            squats: 6,
+            handExtensions: 2,
+            lunges: 24
+        },
+        {
+            name: 'Pratyush',
+            squats: 16,
+            handExtensions: 8,
+            lunges: 5
+        },
     ]
   return (
     <div>
