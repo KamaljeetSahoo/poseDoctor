@@ -1,8 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react'
 import { joints } from "./Joints";
-import { Col, Row } from 'react-bootstrap'
+import { Col, Row, Button } from 'react-bootstrap'
 import { Pose, POSE_CONNECTIONS } from "@mediapipe/pose";
-import * as ReactBootStrap from "react-bootstrap"
 import * as cam from "@mediapipe/camera_utils";
 import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
 import CanvasWebCam from "./UI_Components/CanvasWebCam";
@@ -12,7 +11,7 @@ const CheckVisibility = () => {
   const canvasRef = useRef(0);
   const [vis, setVis] = useState([]);
   var camera = null;
-
+  const switchCamFunction = useRef(null);
 
   function poseEstimation(results) {
     const canvasElement = canvasRef.current;
@@ -114,14 +113,21 @@ const CheckVisibility = () => {
     <div>
       <Row>
         <Col md={6}>
+        <Button
+                variant="primary"
+                onClick={() => switchCamFunction.current()}
+                className="m-1"
+              >
+                Switch Camera
+              </Button>
           <div className="align-items-center justify-content-center">
-            <CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} />
+            <CanvasWebCam webcamRef={webcamRef} canvasRef={canvasRef} switchCamFunction={switchCamFunction}/>
           </div>
         </Col>
         <Col md={6}>
         </Col>
       </Row>
-      <Row style={{ marginTop: 400 }}>
+      {/* <Row style={{ marginTop: 400 }}>
       <div>
               <ReactBootStrap.Table bordered className="text-white">
                 <thead className="text-dark">
@@ -142,7 +148,7 @@ const CheckVisibility = () => {
                 </tbody>
               </ReactBootStrap.Table>
             </div>
-      </Row>
+      </Row> */}
     </div>
   )
 }
