@@ -9,9 +9,9 @@ import CanvasWebCam from "../UI_Components/CanvasWebCam";
 import squatImg from "../images/squats.gif";
 import { calculateAngles, degrees_to_radians } from "../utils";
 import { useNavigate } from "react-router-dom";
-import { useSpeechSynthesis } from 'react-speech-kit';
+import { useSpeechSynthesis } from "react-speech-kit";
 
-
+let onstack = false;
 const options = {
   responsive: true,
   maintainAspectRatio: true,
@@ -52,12 +52,16 @@ const RightHandExtensionDemo = () => {
   const { speak } = useSpeechSynthesis();
 
   const kaha = () => {
-    return speak({ text: "not visible" })
-  }
+    console.log("inside kaha");
+    var msg = new SpeechSynthesisUtterance();
+    msg.text = "not visible";
+    window.speechSynthesis.speak(msg);
+    //return speak({ text: "not visible" });
+  };
 
   const kahaVisibile = () => {
-    return speak({ text: "You are visible" })
-  }
+    return speak({ text: "You are visible" });
+  };
   const [show, setShow] = useState(false);
   const [count, setcount] = useState(0);
   const [adhere, setadhere] = useState(0);
@@ -255,7 +259,13 @@ const RightHandExtensionDemo = () => {
         canvasCtx.strokeStyle = "#ed4c4c";
         canvasCtx.stroke();
 
-        // kaha()
+        if(!onstack){
+          onstack=true;
+          setTimeout(() => {
+            onstack=false;
+            return kaha();
+          }, 3000);
+        }
       }
 
       canvasCtx.fillText(cnt, 35, 60);
