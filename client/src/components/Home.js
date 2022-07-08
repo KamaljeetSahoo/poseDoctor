@@ -32,6 +32,12 @@ const Home = () => {
             imgLink={'https://shoulderelbow.org/wp-content/uploads/2017/01/flexion-extension.jpg'}
             link={'/rightHandExtension'}/>
         </Col>
+        <Col md={3}>
+          <ExerciseCard
+            title={'Exercise Regime'}
+            imgLink={'https://shoulderelbow.org/wp-content/uploads/2017/01/flexion-extension.jpg'}
+            link={'/exerciseRegime'}/>
+        </Col>
       </Row>
       <Row>
         <h1 className='font-weight-bold m-4'>AROM</h1>
