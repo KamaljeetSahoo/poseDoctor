@@ -31,6 +31,11 @@ import Landing from "./components/Landing";
 //User Profile imports
 import Profile from './components/Users/Profile'
 
+//dr reddy figma
+import ExerciseRegime from './components/ExerciseRegime'
+import Frame2 from './components/Frame2'
+
+
 
 function App() {
   return (
@@ -59,6 +64,8 @@ function App() {
               <Route exact path='/rightHandExtensionDemo' element={<RightHandExtensionDemo/>}/>
               <Route exact path='/lungesDemo' element={<LungesDemo/>}/>
               <Route exact path='/squatsDemo' element={<SquatsDemo/>}/>
+              <Route exact path='/exerciseRegime' element={<ExerciseRegime/>}/>
+              <Route exact path='/frame2' element={<Frame2/>}/>
             </Routes>
           </div>
         </div>
@@ -67,3 +74,4 @@ function App() {
 }
 
 export default App;
+
