@@ -29,6 +29,7 @@
     "react-webcam": "^7.0.0",
     "reactstrap": "^9.0.1",
     "recharts": "^2.1.9",
+    "use-sound": "^4.0.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

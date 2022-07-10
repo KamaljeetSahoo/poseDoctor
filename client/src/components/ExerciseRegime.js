@@ -80,7 +80,7 @@ const ExerciseRegime = () => {
       <div className="text-center">
         <Button className="btn-success btn-lg btn-block mt-4">
           <a
-            href="/lunges"
+            href="/frame2"
             className="text-white font-weight-bold"
             style={{ textDecoration: "None" }}
           >

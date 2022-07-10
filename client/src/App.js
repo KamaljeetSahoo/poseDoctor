@@ -33,6 +33,8 @@ import Profile from './components/Users/Profile'
 
 //dr reddy figma
 import ExerciseRegime from './components/ExerciseRegime'
+import Frame2 from './components/Frame2'
+
 
 
 function App() {
@@ -63,6 +65,7 @@ function App() {
               <Route exact path='/lungesDemo' element={<LungesDemo/>}/>
               <Route exact path='/squatsDemo' element={<SquatsDemo/>}/>
               <Route exact path='/exerciseRegime' element={<ExerciseRegime/>}/>
+              <Route exact path='/frame2' element={<Frame2/>}/>
             </Routes>
           </div>
         </div>
