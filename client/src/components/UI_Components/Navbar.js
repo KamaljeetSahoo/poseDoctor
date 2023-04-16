@@ -39,7 +39,7 @@ const NavbarComp = () => {
               className="mr-auto"
               style={{ fontFamily: "Monoton", fontSize: "40px" }}
             >
-              PoseDoc
+              Healthify
             </NavbarBrand>
             <NavLink href="/profile" style={{marginRight:'10px'}}>Profile &nbsp;<i className="fa-solid fa-user"></i></NavLink>
             <NavbarToggler onClick={toggleNavbar} className="mr-2" />
