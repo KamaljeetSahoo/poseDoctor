@@ -17,7 +17,7 @@ const Profile = () => {
 
   const getUser = async () => {
       console.log("Get User")
-      const response = await fetch(`http://localhost:5001/api/auth/getUser`, {
+      const response = await fetch(`https://api.health-ify.works/api/auth/getUser`, {
         method: "GET",
         headers: {
             "auth-token": localStorage.getItem("token"),

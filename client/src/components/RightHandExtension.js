@@ -338,7 +338,7 @@ const RightHandExtension = () => {
   const addHandExtension = async (count, adherance, time) => {
     try {
       const response = await fetch(
-        `http://localhost:5001/api/handExtension/addHandExtension`,
+        `https://api.health-ify.works/api/handExtension/addHandExtension`,
         {
           method: "POST",
           headers: {

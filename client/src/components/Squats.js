@@ -339,7 +339,7 @@ const Squats = () => {
   };
 
   const addSquats = async (count, adhere, totalTime) => {
-    const response = await fetch(`http://localhost:5001/api/squats/addSquats`, {
+    const response = await fetch(`https://api.health-ify.works/api/squats/addSquats`, {
       method: "POST",
       headers: {
         "auth-token": localStorage.getItem("token"),

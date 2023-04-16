@@ -123,7 +123,7 @@ const LeaderBoard = () => {
 
     const [users, setUsers] = useState([])
     const fetchAllUsers = async() => {
-        const response = await fetch(`http://localhost:5001/api/auth/getAllUsers`, {
+        const response = await fetch(`https://api.health-ify.works/api/auth/getAllUsers`, {
             method: 'GET',
             headers: {
                 "auth-token": localStorage.getItem("token"),

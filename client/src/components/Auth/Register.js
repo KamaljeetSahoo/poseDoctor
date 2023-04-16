@@ -20,7 +20,7 @@ const Register = () => {
         const {name, email, password} = credentials;
         console.log("submission", name, email, password)
 
-        const response = await fetch(`http://localhost:5001/api/auth/register`, {
+        const response = await fetch(`https://api.health-ify.works/api/auth/register`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
